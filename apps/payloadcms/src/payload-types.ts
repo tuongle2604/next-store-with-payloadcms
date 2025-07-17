@@ -505,6 +505,7 @@ export interface Product {
   id: number;
   name?: string | null;
   description?: string | null;
+  price?: number | null;
   thumbnail?: string | null;
   variants?:
     | {
@@ -1236,6 +1237,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
+  price?: T;
   thumbnail?: T;
   variants?:
     | T

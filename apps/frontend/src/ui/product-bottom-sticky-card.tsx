@@ -15,7 +15,6 @@ export const ProductBottomStickyCard = ({
   locale: string;
   show: boolean;
 }) => {
-  console.log("cartItem123456", cartItem);
   return (
     <div
       tabIndex={show ? 0 : -1}
@@ -26,12 +25,12 @@ export const ProductBottomStickyCard = ({
           : "transform translate-y-full"
       )}
     >
-      <div className="mx-auto w-full max-w-7xl gap-x-2 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        <div className="flex items-center gap-x-2 sm:gap-x-4 min-w-0">
+      <div className="flex items-center justify-between w-full px-4 mx-auto max-w-7xl gap-x-2 sm:px-6 lg:px-8">
+        <div className="flex items-center min-w-0 gap-x-2 sm:gap-x-4">
           <div className="shrink-0">
             {cartItem?.productId && (
               <MainProductImage
-                className="w-16 h-16 rounded-lg bg-neutral-100 object-cover object-center"
+                className="object-cover object-center w-16 h-16 rounded-lg bg-neutral-100"
                 src={cartItem.images[0]?.url || ""}
                 loading="eager"
                 priority
@@ -40,7 +39,7 @@ export const ProductBottomStickyCard = ({
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-xs sm:text-base md:text-lg whitespace-nowrap text-ellipsis overflow-clip">
+            <h3 className="text-xs font-semibold sm:text-base md:text-lg whitespace-nowrap text-ellipsis overflow-clip">
               {cartItem.name}
             </h3>
 

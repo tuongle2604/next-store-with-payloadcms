@@ -3,12 +3,13 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { slugField } from '../../fields/slug'
 import { productDetail } from './endpoints/productDetail'
+import { productRelated } from './endpoints/productRelated'
 
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
     useAsTitle: 'name', // 👈 This will be used in dropdowns instead of the ID
-    defaultColumns: ['name', 'thumbnail', 'variants', 'tags', 'category'],
+    defaultColumns: ['name', 'thumbnail', 'price', 'tags', 'category'],
   },
   access: {
     admin: authenticated,
@@ -17,7 +18,16 @@ export const Products: CollectionConfig = {
     read: () => true,
     update: authenticated,
   },
-  endpoints: [productDetail],
+  endpoints: [productDetail, productRelated],
+  // hooks: {
+  //   beforeValidate: [
+  //     async ({ data, req }) => {
+  //       console.log(data.variants[0])
+
+  //       return data
+  //     },
+  //   ],
+  // },
   fields: [
     {
       name: 'name',
@@ -26,6 +36,30 @@ export const Products: CollectionConfig = {
     {
       name: 'description',
       type: 'textarea',
+    },
+    {
+      name: 'price',
+      label: 'Price (First variant)',
+      type: 'number',
+      admin: {
+        // hidden: true, // Hide this field in the admin UI
+        readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [
+          async ({ data, req }) => {
+            console.log(data)
+
+            if (data && data.variants?.length > 0) {
+              const variant = data.variants[0]
+
+              return variant.price
+            }
+
+            return null
+          },
+        ],
+      },
     },
     {
       name: 'thumbnail',
@@ -39,7 +73,7 @@ export const Products: CollectionConfig = {
       hooks: {
         beforeValidate: [
           async ({ data, req }) => {
-            if (data && data.variants.length > 0) {
+            if (data && data.variants?.length > 0) {
               const variant = data.variants[0]
 
               const mediaDoc = await req.payload.findByID({
@@ -47,8 +81,10 @@ export const Products: CollectionConfig = {
                 id: variant.images[0],
               })
 
-              return mediaDoc
+              return mediaDoc.url
             }
+
+            return ''
           },
         ],
       },

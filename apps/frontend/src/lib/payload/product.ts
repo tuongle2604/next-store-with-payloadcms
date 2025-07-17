@@ -25,4 +25,12 @@ async function getProductDetail(slug: string) {
   return result;
 }
 
-export { getProducts, getProductDetail };
+async function getRelatedProducts(tagIds: number[] | undefined) {
+  const result: PaginatedResult<Product> = await api.get(
+    `http://localhost:3000/api/products/related-by-tag?tags=${tagIds?.join(",")}`
+  );
+
+  return result?.docs;
+}
+
+export { getProducts, getProductDetail, getRelatedProducts };

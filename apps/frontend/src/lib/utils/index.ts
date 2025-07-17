@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Product } from "../payload/payload-types";
 import { CartItem } from "@/store/cart.store";
+import { Media, Product } from "../payload/payload-types";
 
 export const isDefined = <T>(value: T | null | undefined): value is T =>
   value !== null && value !== undefined;
@@ -255,3 +255,25 @@ export const calculateCartTotal = (cartItems: CartItem[]) => {
     return total + itemPrice;
   }, 0);
 };
+
+const getImageFromVariant = (
+  variant: Product["variants"][number]
+): Media | null => {
+  if (!variant.images || variant.images.length === 0) {
+    return null;
+  }
+
+  const image = variant.images[0];
+  return image;
+};
+
+const getImagFromProduct = (product: Product): Media | null => {
+  if (!product?.variants || product.variants.length === 0) {
+    return null;
+  }
+
+  const defaultVariant = product.variants[0];
+  return getImageFromVariant(defaultVariant);
+};
+
+export { getImageFromVariant, getImagFromProduct };

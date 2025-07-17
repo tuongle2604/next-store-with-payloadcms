@@ -538,7 +538,7 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
-  tags?: (number | Tag)[] | null;
+  tags?: Tag[] | null;
   category?: null | Category;
   slug?: string | null;
   slugLock?: boolean | null;

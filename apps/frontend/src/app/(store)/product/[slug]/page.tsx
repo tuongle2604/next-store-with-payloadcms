@@ -13,7 +13,7 @@ import { getLocale, getTranslations } from "@/i18n/server";
 import { getProductDetail } from "@/lib/payload/product";
 import { getRecommendedProducts } from "@/lib/search/trieve";
 import { cn, deslugify, formatMoney, formatProductName } from "@/lib/utils";
-import type { TrieveProductMetadata } from "@/scripts/upload-trieve";
+// import type { TrieveProductMetadata } from "@/scripts/upload-trieve";
 import { AddToCartButton } from "@/ui/add-to-cart-button";
 import { JsonLd, mappedProductToJsonLd } from "@/ui/json-ld";
 import { Markdown } from "@/ui/markdown";
@@ -28,6 +28,8 @@ import { Suspense } from "react";
 import ProductRelated from "./product-related";
 import { getVariantName } from "@/lib/utils";
 import ProductVariant from "./product-variant";
+import { Product } from "@/types/payload-types";
+import { getImageFromVariant } from "@/lib/utils";
 // export const generateMetadata = async (props: {
 //   params: Promise<{ slug: string }>;
 //   searchParams: Promise<{ variant?: string }>;
@@ -77,6 +79,7 @@ export default async function SingleProductPage(props: {
   const { variant } = searchParams;
   const category = product.category;
   let selectedVariant = product.variants?.[0];
+  const images = product.variants?.map((v) => v.images).flat() || [];
 
   if (searchParams.variant) {
     selectedVariant = product.variants?.find(
@@ -97,6 +100,14 @@ export default async function SingleProductPage(props: {
     variantId: selectedVariant?.id || "",
     quantity: 1,
   };
+
+  // function getVariantImage(variant: Product["variants"][number]) {
+  //   if (!variant.images || variant.images.length === 0) {
+  //     return null;
+  //   }
+  //   const image = variant.images[0];
+  //   return image;
+  // }
 
   return (
     <article className="pb-12">
@@ -168,27 +179,29 @@ export default async function SingleProductPage(props: {
             <h2 className="sr-only">{t("imagesTitle")}</h2>
 
             <div className="grid gap-4 lg:grid-cols-3 [&>*:first-child]:col-span-3">
-              {/* {product.metadata.preview && (
-								<ProductModel3D model3d={product.metadata.preview} imageSrc={product.images[0]} />
-							)} */}
-              {selectedVariant.images?.map((image, idx) => {
-                const params = new URLSearchParams({
-                  image: idx.toString(),
-                });
-                if (searchParams.variant) {
-                  params.set("variant", searchParams.variant);
-                }
+              <MainProductImage
+                key={getImageFromVariant(selectedVariant)?.id}
+                className="object-cover object-center w-full transition-opacity rounded-lg bg-neutral-100"
+                src={getImageFromVariant(selectedVariant)?.url || ""}
+                loading="eager"
+                priority
+                alt=""
+              />
+            </div>
+            <div className="grid grid-cols-4 gap-3 gap-4 mt-4 lg:grid-cols-5 lg:gap-4">
+              {images.map((image, idx) => {
                 return (
-                  <YnsLink key={idx} href={`?${params}`} scroll={false}>
-                    <MainProductImage
-                      key={image.id}
-                      className="object-cover object-center w-full transition-opacity rounded-lg bg-neutral-100"
-                      src={image.url || ""}
-                      loading="eager"
-                      priority
-                      alt=""
-                    />
-                  </YnsLink>
+                  <Image
+                    key={image?.id || idx}
+                    className="object-cover object-center w-full transition-opacity rounded-lg bg-neutral-100"
+                    src={image?.url || ""}
+                    width={160}
+                    height={160}
+                    sizes="(max-width: 1024x) 33vw, (max-width: 1280px) 20vw, 225px"
+                    loading="eager"
+                    priority
+                    alt=""
+                  />
                 );
               })}
             </div>
@@ -213,7 +226,7 @@ export default async function SingleProductPage(props: {
       </StickyBottom>
 
       <Suspense>
-        {/* <ProductRelated /> */}
+        <ProductRelated tagIds={product.tags?.map((o) => o.id)} />
         {/* <SimilarProducts id={product.id} /> */}
       </Suspense>
 
