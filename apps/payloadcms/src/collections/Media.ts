@@ -9,7 +9,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { admins } from '@/access/admin'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -18,16 +18,24 @@ export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: admins,
+    delete: admins,
     read: anyone,
-    update: authenticated,
+    update: admins,
   },
   fields: [
     {
       name: 'alt',
       type: 'text',
       //required: true,
+    },
+    {
+      name: 'prefix', //this field for integrate with s3 storage plugin
+      type: 'text',
+      admin: {
+        readOnly: true,
+        hidden: true,
+      },
     },
     {
       name: 'caption',
@@ -39,23 +47,26 @@ export const Media: CollectionConfig = {
       }),
     },
   ],
-  hooks: {
-    afterRead: [
-      ({ doc }) => {
-        const baseUrl = process.env.IMAGE_BASE_URL || ''
-        if (doc.url && typeof doc.url === 'string') {
-          doc.url = `${baseUrl}${doc.url}`
-        }
+  // hooks: {
+  //   afterRead: [
+  //     ({ doc }) => {
+  //       console.log('*******')
+  //       console.log('doc.url before:', doc.url)
 
-        return doc
-      },
-    ],
-  },
+  //       // const baseUrl = process.env.IMAGE_BASE_URL || ''
+  //       // if (doc.url && typeof doc.url === 'string') {
+  //       //   doc.url = `${baseUrl}${doc.url}`
+  //       // }
+
+  //       return doc
+  //     },
+  //   ],
+  // },
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
-    staticDir: path.resolve(dirname, '../../public/media'),
-    adminThumbnail: 'thumbnail',
+    // adminThumbnail: 'thumbnail',
     focalPoint: true,
+    staticDir: path.resolve(dirname, '../../public/media'),
     // imageSizes: [
     //   {
     //     name: 'thumbnail',

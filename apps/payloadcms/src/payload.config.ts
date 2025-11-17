@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -12,6 +13,8 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Products } from './collections/Products'
+import { Customers } from './collections/Customers'
+import { Orders } from './collections/Orders'
 // import { ProductVariants } from './collections/product-variants'
 import { Tags } from './collections/Tags'
 import { Header } from './Header/config'
@@ -19,7 +22,6 @@ import { Footer } from './Footer/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@cms/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
-
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -67,6 +69,19 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || '', //"Store" <testonly999999@gmail.com>
+    defaultFromName: process.env.EMAIL_FROM_NAME || '',
+    // Any Nodemailer transport
+    transportOptions: {
+      // This is where we'll provide SendGrid information (next step)
+      service: process.env.SMTP_SERVICE,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
   folders: {
     // debug: true, // optional
     collectionOverrides: [
@@ -77,13 +92,19 @@ export default buildConfig({
     fieldName: 'folder', // optional
     slug: 'payload-folders', // optional
   },
-  collections: [Pages, Posts, Media, Categories, Users, Products, Tags],
-  cors: [getServerSideURL()].filter(Boolean),
+  collections: [Customers, Pages, Posts, Media, Categories, Users, Products, Tags, Orders],
+  // cors: [getServerSideURL()].filter(Boolean),
+  cors: [process.env.NEXT_PUBLIC_CLIENT_URL || ''],
   globals: [Header, Footer],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder
   ],
+  upload: {
+    limits: {
+      fileSize: 1 * 1024 * 1024, // 1 MB
+    },
+  },
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {

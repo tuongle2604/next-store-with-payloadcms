@@ -17,13 +17,13 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { hostname: "localhost" },
-      { hostname: "files.stripe.com" },
-      { hostname: "d1wqzb5bdbcre6.cloudfront.net" },
-      { hostname: "*.blob.vercel-storage.com" },
+      // { hostname: "files.stripe.com" },
+      // { hostname: "d1wqzb5bdbcre6.cloudfront.net" },
+      // { hostname: "*.blob.vercel-storage.com" },
     ],
     formats: ["image/avif", "image/webp"],
   },
-  transpilePackages: ["next-mdx-remote", "commerce-kit"],
+  // transpilePackages: ["next-mdx-remote", "commerce-kit"],
   experimental: {
     esmExternals: true,
     scrollRestoration: true,
@@ -45,12 +45,12 @@ const nextConfig: NextConfig = {
       },
     };
   },
-  rewrites: async () => [
-    {
-      source: "/stats/:match*",
-      destination: "https://eu.umami.is/:match*",
-    },
-  ],
+  // rewrites: async () => [
+  //   {
+  //     source: "/stats/:match*",
+  //     destination: "https://eu.umami.is/:match*",
+  //   },
+  // ],
 };
 
 export default withMDX(nextConfig);

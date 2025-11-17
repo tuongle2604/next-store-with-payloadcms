@@ -1,30 +1,28 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { decrypt, updateSession } from "./lib/auth";
+// import { decrypt, updateSession } from "./lib/auth";
 
-const ProtectedPaths = ["/orders"];
+const authenticatedPaths = ["/account", "/orders", "/cart"];
+const redirectPaths = ["/login", "/register", "/forgot-password"];
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const isProtectedPath = ProtectedPaths.some((p) => pathname.startsWith(p));
+  // const token = request.cookies.get("payload-token")?.value;
+  // const isLoggedIn = Boolean(token);
+  // const { pathname } = request.nextUrl;
 
-  if (!isProtectedPath) {
-    return NextResponse.next();
-  }
+  // if (
+  //   !isLoggedIn &&
+  //   authenticatedPaths.some((path) => pathname.startsWith(path))
+  // ) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
-  const session = request.cookies.get("session")?.value;
-  if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  const data = await decrypt(session);
-  if (!data || data.expires < Date.now()) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  return updateSession(request);
+  // if (isLoggedIn && redirectPaths.some((path) => pathname.startsWith(path))) {
+  //   return NextResponse.redirect(new URL("/", request.url));
+  // }
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/orders"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

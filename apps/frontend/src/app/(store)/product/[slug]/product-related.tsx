@@ -1,30 +1,28 @@
 import Image from "next/image";
 import { getRelatedProducts } from "@/lib/payload";
-import { YnsLink } from "@/ui/yns-link";
+import { YnsLink } from "@/components/ui/yns-link";
 import { getImagFromProduct } from "@/lib/utils";
-import { fomartMoney } from "@/lib/utils";
+import { formatMoney } from "@/lib/utils";
 
 export default async function ProductRelated({
   tagIds,
+  productId,
 }: {
   tagIds: number[] | undefined;
+  productId: number;
 }) {
-  const relatedProducts = await getRelatedProducts(tagIds);
-  // const products = await getRecommendedProducts({ productId: id, limit: 4 });
-  console.log("Related Products:", relatedProducts);
+  const relatedProducts = await getRelatedProducts(tagIds, productId);
 
   if (!relatedProducts) {
     return null;
   }
-
-  const defaultVariant = relatedProducts[0]?.variants?.[0];
 
   return (
     <section className="py-12">
       <div className="mb-8">
         <h2 className="text-2xl font-bold tracking-tight">You May Also Like</h2>
       </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:gap-6 md:grid-cols-3 lg:grid-cols-4">
         {relatedProducts.map((product) => {
           return (
             <div
@@ -32,7 +30,7 @@ export default async function ProductRelated({
               className="overflow-hidden rounded shadow-sm bg-card group"
             >
               <YnsLink
-                href={`${product?.category?.slug}/${product.slug}`}
+                href={`/product/${product.slug}`}
                 className="block"
                 prefetch={false}
               >
@@ -59,8 +57,8 @@ export default async function ProductRelated({
                 </h3>
                 <div className="flex items-center justify-between">
                   <span>
-                    {fomartMoney({
-                      amount: defaultVariant.price,
+                    {formatMoney({
+                      amount: product.price,
                       currency: "USD",
                     })}
                   </span>

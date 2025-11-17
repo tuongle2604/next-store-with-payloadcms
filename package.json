@@ -25,5 +25,9 @@
       "@vercel/speed-insights",
       "sharp"
     ]
-  }
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

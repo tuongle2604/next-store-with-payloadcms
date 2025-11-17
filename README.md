@@ -1,84 +1,123 @@
-# Turborepo starter
+# NextStore Monorepo (Frontend + Payload CMS)
 
-This Turborepo starter is maintained by the Turborepo core team.
+This repository is a Turborepo-powered monorepo containing:
 
-## Using this example
+- **Frontend** — Next.js App Router storefront based on [`yournextstore`](https://github.com/yournextstore/yournextstore)
+- **CMS backend** — Payload CMS for product, media, and content management
+- **Shared packages** — Reusable schemas, shared TypeScript utilities, and lint configs
 
-Run the following command:
+---
+
+## 📁 Project Structure
+
+/
+├── apps/
+│ ├── frontend/ # Next.js storefront (public site)
+│ └── payloadcms/ # Payload CMS backend
+├── packages/
+│ ├── schemas
+│ ├── shared-data
+└── turbo.json # Turborepo task pipeline
+
+---
+
+## 🚀 Applications
+
+### `frontend/` — Next.js Storefront
+
+- App Router + Server Components
+- Fetches catalog, categories, and media from the Payload CMS API
+- Static assets delivered through S3 + CloudFront
+- Supports SSR/ISR for product pages
+- Uses shared schemas for strong typing between frontend and backend
+
+### `payloadcms/` — Payload CMS Backend
+
+- Manages products, categories, orders, customers, media
+- PostgreSQL support (RDS recommended for production)
+- Media storage via S3
+- Authentication, access control, admin UI out-of-the-box
+- Deployable to Elastic Beanstalk
+
+---
+
+## Environment Variables
+
+Frontend (apps/frontend/.env)
 
 ```sh
-npx create-turbo@latest
+  PAYLOAD_SECRET=XXXXXXXXXXXXXX
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=XXXXXXXXXXXXXX
 ```
 
-## What's inside?
+Payloadcms (apps/cms/.env)
 
-This Turborepo includes the following packages/apps:
+```sh
+  APP_ENV=development   # or: production
 
-### Apps and Packages
+  PAYLOAD_SECRET=XXXXXXXXXXXXXX
+  DATABASE_URI=postgres://USER:PASS@HOST:5432/DATABASE
+  NEXT_PUBLIC_CLIENT_URL=http://localhost:8080
+  NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+  # Added by Payload
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+  SMTP_SERVICE=gmail
+  SMTP_USER=XXXXXXXXXXXXXX@gmail.com
+  SMTP_PASS=XXXXXXXXXXXXXX
+  EMAIL_FROM_NAME=NextStore
+  EMAIL_FROM_ADDRESS=XXXXXXXXXXXXXX@gmail.com
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+  S3_BUCKET=XXXXXXXXXXXXXX
+  S3_ENDPOINT=https://<bucket>.s3.<region>.amazonaws.com
+  S3_REGION=XXXXXXXXXXXXXX
+  S3_ACCESS_KEY_ID=XXXXXXXXXXXXXX
+  S3_SECRET_ACCESS_KEY=XXXXXXXXXXXXXX
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+  STRIPE_SECRET_KEY=XXXXXXXXXXXXXX
+  STRIPE_PUBLIC_KEY=XXXXXXXXXXXXXX
 ```
 
-### Develop
+# APP_ENV
 
-To develop all apps and packages, run the following command:
+Controls how Payload handles file uploads:
 
+- development:
+  Media files are stored locally on the filesystem. This avoids accidental S3 charges and speeds up development.
+- production:
+  Media files are uploaded to Amazon S3 using the S3 variables below. Use this mode for all hosted deployments.
+
+---
+
+## 🛠 Development
+
+Install dependencies:
+
+```sh
+pnpm install
 ```
-cd my-turborepo
+
+Run all apps:
+
+```sh
 pnpm dev
 ```
 
-### Remote Caching
+CMS runs at [`http://localhost:8080`](http://localhost:8080)
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Frontend runs at [`http://localhost:3000`](http://localhost:3000)
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+---
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+## 🛠 Production
 
-```
-cd my-turborepo
-npx turbo login
-```
+Build all apps:
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+```sh
+pnpm run build
 ```
 
-## Useful Links
+Start each app:
 
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+```sh
+pnpm start
+```

@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "composite": true,
+    // "declaration": true,
+    // "emitDeclarationOnly": true,
+    // "declarationDir": "dist/types",
+    // "outDir": "dist",
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -13,7 +18,7 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "noEmit": false,
     "incremental": true,
     "jsx": "preserve",
     "module": "esnext",
@@ -27,20 +32,24 @@
       }
     ],
     "paths": {
+      "@/*": ["./src/*"],
       "@payload-config": ["./src/payload.config.ts"],
       "react": ["./node_modules/@types/react"],
-      "@/*": ["./src/*"],
       "/src/*": ["./src/*"],
-      "@cms/*": ["./src/*"]
+      "@cms/*": ["./src/*"],
+      "@repo/schemas/*": ["../../packages/schemas/src/*"],
+      "@repo/shared-data/*": ["../../packages/shared-data/src/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
+  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": [
+    "node_modules",
     "redirects.js",
     "next.config.js",
-    "next-sitemap.config.cjs"
+    "next-sitemap.config.cjs",
+    "src/app/(payload)/admin/importMap.js",
+    "src/cssVariables.js"
   ],
-  "exclude": ["node_modules"]
+  "references": [{ "path": "../../packages/schemas" }, { "path": "../../packages/shared-data" }]
+  // "extends": "../../tsconfig.base.json"
 }

@@ -5,9 +5,9 @@ import '@payloadcms/next/css'
 import type { ServerFunctionClient } from 'payload'
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
-
 import { importMap } from './admin/importMap.js'
 import './custom.scss'
+import QueryClientProvider from '@/providers/QueryClientProvider'
 
 type Args = {
   children: React.ReactNode
@@ -22,9 +22,15 @@ const serverFunction: ServerFunctionClient = async function (args) {
   })
 }
 
+function Providers({ children }: { children: React.ReactNode }) {
+  'use client'
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+}
+
 const Layout = ({ children }: Args) => (
   <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
-    {children}
+    <QueryClientProvider>{children}</QueryClientProvider>
+    {/* <QueryClientProvider client={queryClient}>{children}</QueryClientProvider> */}
   </RootLayout>
 )
 

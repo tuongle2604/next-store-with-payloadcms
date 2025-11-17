@@ -14,6 +14,9 @@ import { beforeSyncWithSearch } from '@cms/search/beforeSync'
 import { Page, Post } from '@cms/payload-types'
 import { getServerSideURL } from '@cms/utilities/getURL'
 
+import { s3Storage } from '@payloadcms/storage-s3'
+import { Media } from '../collections/Media'
+
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
 }
@@ -23,6 +26,8 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
 
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
+
+console.log('process.env.NODE_ENV ', process.env.APP_ENV)
 
 export const plugins: Plugin[] = [
   redirectsPlugin({
@@ -90,5 +95,26 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  payloadCloudPlugin(),
+  // payloadCloudPlugin(),
+  s3Storage({
+    collections: {
+      [Media.slug]: {
+        prefix: 'media/',
+        disableLocalStorage: true,
+        disablePayloadAccessControl: true,
+        generateFileURL: async ({ filename }: { filename: string }) => {
+          return `${process.env.S3_ENDPOINT}/media/${filename}`
+        },
+      },
+    },
+    enabled: process.env.APP_ENV === 'production',
+    bucket: process.env.S3_BUCKET ?? '',
+    config: {
+      region: process.env.S3_REGION ?? 'auto',
+      credentials: {
+        accessKeyId: process.env.S3_ACCESS_KEY_ID ?? '',
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? '',
+      },
+    },
+  }),
 ]

@@ -3,8 +3,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { env, publicUrl } from "@/env.mjs";
 import { IntlClientProvider } from "@/i18n/client";
 import { getLocale, getMessages, getTranslations } from "@/i18n/server";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+// import { Analytics } from "@vercel/analytics/react";
+// import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 // import Script from "next/script";
 
@@ -33,7 +33,7 @@ export default async function RootLayout({
           >
             {children}
           </div>
-          <Toaster position="top-center" offset={10} />
+          <Toaster position="bottom-right" offset={10} richColors />
         </IntlClientProvider>
         {/* {env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
 					<Script
@@ -43,8 +43,6 @@ export default async function RootLayout({
 						data-website-id={env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
 					/>
 				)} */}
-        <SpeedInsights />
-        <Analytics />
       </body>
     </html>
   );

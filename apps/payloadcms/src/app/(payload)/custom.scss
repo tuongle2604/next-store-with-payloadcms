@@ -1,0 +1,11 @@
+// @tailwind base;
+// @tailwind components;
+@tailwind utilities;
+
+span.field-label:not(.unstyled) {
+  padding-bottom: 5px;
+}
+
+.table {
+  width: 100%;
+}

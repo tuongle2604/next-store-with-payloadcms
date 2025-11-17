@@ -1,0 +1,55 @@
+import StoreConfig from "@/store.config";
+import { NavMobileMenu } from "@/components/nav/nav-mobile-menu.client";
+import Link from "next/link";
+
+const links = [
+  {
+    label: "Home",
+    href: "/",
+  },
+  ...StoreConfig.categories.map(({ name, slug }) => ({
+    label: name,
+    href: `/category/${slug}`,
+  })),
+  {
+    label: "Digital",
+    href: "/category/digital",
+  },
+];
+
+export const NavMenu = () => {
+  return (
+    <>
+      <div className="hidden sm:block">
+        <ul className="flex flex-row items-center justify-center gap-x-1">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors bg-transparent rounded-md group h-9 w-max hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-hidden"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="flex items-center sm:hidden">
+        <NavMobileMenu>
+          <ul className="flex flex-col items-stretch justify-center pb-8 gap-x-1">
+            {links.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium transition-colors bg-transparent rounded-md group h-9 hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-hidden"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </NavMobileMenu>
+      </div>
+    </>
+  );
+};

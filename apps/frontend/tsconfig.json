@@ -1,6 +1,9 @@
 {
+  // "extends": "../../tsconfig.base.json",
   "$schema": "https://json.schemastore.org/tsconfig.json",
   "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
     "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -26,10 +29,12 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@ui/*": ["./src/ui/*"],
+      // "@ui/*": ["./src/components/ui/*"],
       "@lib/*": ["./src/lib/*"],
-      "@/components/ui/*": ["./src/ui/shadcn/*"],
-      "@cms/*": ["../payloadcms/src/*"]
+      // "@/components/ui/*": ["./src/ui/shadcn/*"],
+      "@repo/cms/*": ["../payloadcms/src/*"],
+      "@repo/schemas/*": ["../../packages/schemas/src/*"],
+      "@repo/shared-data/*": ["../../packages/shared-data/src/*"]
     }
   },
   "include": [
@@ -40,5 +45,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "src/script/**/*.ts"]
+  "exclude": ["node_modules", "src/script/**/*.ts"],
+  "references": [
+    { "path": "../payloadcms" },
+    { "path": "../../packages/schemas" },
+    { "path": "../../packages/shared-data" }
+  ]
 }

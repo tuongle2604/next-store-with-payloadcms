@@ -9,12 +9,24 @@ export const productRelated: Endpoint = {
     const result = await payload.find({
       collection: 'products',
       where: {
-        tags: {
-          in: query.tags,
-        },
+        and: [
+          {
+            tags: {
+              in: query.tags,
+            },
+          },
+          {
+            id: {
+              not_equals: query.productId,
+            },
+          },
+        ],
+        // tags: {
+        //   in: query.tags,
+        // },
       },
-      depth: 2, // optional, depending on your data needs
-      limit: 5, // limit to 4 related products
+      depth: 1, // optional, depending on your data needs
+      limit: 4, // limit to 4 related products
     })
 
     return Response.json(result)

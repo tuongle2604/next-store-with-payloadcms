@@ -1,36 +1,53 @@
+"use server";
 import api from "../utils/api";
-import { Product } from "./payload-types";
-import { PaginatedResult } from "../types";
+import { Where, Product } from "@repo/cms/types";
+import { buildQuery } from "../utils";
+interface ProductParams {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  [key: string]: string | number | undefined | null;
+}
 
-async function getProducts() {
-  try {
-    const result: PaginatedResult<Product> = await api.get(
-      "http://localhost:3000/api/products"
-    );
+async function getProducts(params: ProductParams = {}, query?: Where) {
+  const queryString = buildQuery(params, query);
 
-    return result?.docs;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Error creating post: ${error.message}`);
-    }
-    throw new Error("An unknown error occurred");
+  const { data, error } = await api.get<PaginatedResult<Product>>(
+    `/api/products?${queryString}`
+  );
+
+  if (error) {
+    return [];
   }
+
+  return data?.docs || [];
 }
 
 async function getProductDetail(slug: string) {
-  const result: Product = await api.get(
-    `http://localhost:3000/api/products/detail-by-slug/${slug}`
+  const { data, error } = await api.get<Product>(
+    `/api/products/detail-by-slug/${slug}`
   );
 
-  return result;
+  if (error) {
+    return null;
+  }
+
+  return data;
 }
 
-async function getRelatedProducts(tagIds: number[] | undefined) {
-  const result: PaginatedResult<Product> = await api.get(
-    `http://localhost:3000/api/products/related-by-tag?tags=${tagIds?.join(",")}`
+async function getRelatedProducts(
+  tagIds: number[] | undefined,
+  productId: number
+) {
+  const { data, error } = await api.get<PaginatedResult<Product>>(
+    `/api/products/related-by-tag?tags=${tagIds?.join(",")}&productId=${productId}`
   );
 
-  return result?.docs;
+  if (error) {
+    return [];
+  }
+
+  return data?.docs || [];
 }
 
 export { getProducts, getProductDetail, getRelatedProducts };

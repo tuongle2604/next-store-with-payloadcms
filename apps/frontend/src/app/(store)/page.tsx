@@ -1,10 +1,10 @@
 import { publicUrl } from "@/env.mjs";
 import { getHomePage, getProducts } from "@/lib/payload";
-import { Media } from "@/lib/payload/payload-types";
+import { Media } from "@repo/cms/types";
 import StoreConfig from "@/store.config";
-import { CategoryBox } from "@/ui/category-box";
-import { ProductList } from "@/ui/products/product-list";
-import { YnsLink } from "@/ui/yns-link";
+import { CategoryBox } from "@/components/ui/category-box";
+import { ProductList } from "@/components/products/product-list";
+import { YnsLink } from "@/components/ui/yns-link";
 import Image from "next/image";
 import type { Metadata } from "next/types";
 
@@ -13,20 +13,15 @@ export const metadata = {
 } satisfies Metadata;
 
 export default async function Home() {
-  // const products = await Commerce.productBrowse({ first: 6 });
   const [homePage, products] = await Promise.all([
     getHomePage(),
-    getProducts(),
+    getProducts({ limit: 6, sort: "createdAt_DESC" }),
   ]);
-  // const homePage = await getHomePage();
-  // const products = await getProducts();
 
-  if (!homePage) {
+  if (!homePage || !homePage.hero) {
     return null;
   }
-
-  const { hero } = homePage;
-  const { links, media, title, description } = hero;
+  const { links, media, title, description } = homePage.hero;
   const actionLink = links?.[0]?.link;
   const mediaUrl = (media as Media).url || "";
 

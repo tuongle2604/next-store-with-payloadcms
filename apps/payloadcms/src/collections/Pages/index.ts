@@ -2,17 +2,20 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { admins } from '@/access/admin'
+
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { RelatedContentBlock } from '@/blocks/RelatedContentBlock/config'
 import { hero } from '@cms/heros/config'
 import { slugField } from '@cms/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
-
+import { CollectionSelectorBlock } from '@/blocks/CollectionSelectorBlock/config'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -25,10 +28,10 @@ import { pageDetail } from './endpoints/pageDetail'
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    create: admins,
+    delete: admins,
+    read: authenticated,
+    update: admins,
   },
   // This config controls what's populated by default when a page is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -76,8 +79,16 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
-              required: true,
+              blocks: [
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                // CollectionSelectorBlock,
+                // RelatedContentBlock,
+              ],
+              // required: true,
               admin: {
                 initCollapsed: true,
               },

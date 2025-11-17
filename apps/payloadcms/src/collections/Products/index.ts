@@ -1,9 +1,10 @@
 import type { CollectionConfig } from 'payload'
-
-import { authenticated } from '../../access/authenticated'
+import { authenticated } from '@/access/authenticated'
+import { admins } from '@/access/admin'
 import { slugField } from '../../fields/slug'
 import { productDetail } from './endpoints/productDetail'
 import { productRelated } from './endpoints/productRelated'
+import { generateSKU } from '@/utilities/generateSKU'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -13,21 +14,43 @@ export const Products: CollectionConfig = {
   },
   access: {
     admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
+    create: admins,
+    delete: admins,
     read: () => true,
-    update: authenticated,
+    update: admins,
   },
   endpoints: [productDetail, productRelated],
-  // hooks: {
-  //   beforeValidate: [
-  //     async ({ data, req }) => {
-  //       console.log(data.variants[0])
-
-  //       return data
-  //     },
-  //   ],
-  // },
+  hooks: {
+    beforeValidate: [
+      // async ({ data, req }) => {
+      //   if (data && data.variants?.length > 0) {
+      //     const variant = data.variants[0]
+      //     const mediaDoc = await req.payload.findByID({
+      //       collection: 'media',
+      //       id: variant.images[0],
+      //     })
+      //     return mediaDoc.url
+      //   }
+      //   return ''
+      // },
+      // async ({ data }) => {
+      //   console.log('beforeValidate - data:', data)
+      //   if (data?.variants && data?.category.slug && data?.id) {
+      //     data.variants = data.variants.map((variant: any) => {
+      //       if (!variant.sku) {
+      //         variant.sku = generateSKU({
+      //           categoryCode: data?.category.slug,
+      //           productId: data.id, // Payload auto-generates _id, or you can use a custom field
+      //           color: variant.color,
+      //           size: variant.size,
+      //         })
+      //       }
+      //       return variant
+      //     })
+      //   }
+      // },
+    ],
+  },
   fields: [
     {
       name: 'name',
@@ -44,21 +67,6 @@ export const Products: CollectionConfig = {
       admin: {
         // hidden: true, // Hide this field in the admin UI
         readOnly: true,
-      },
-      hooks: {
-        beforeValidate: [
-          async ({ data, req }) => {
-            console.log(data)
-
-            if (data && data.variants?.length > 0) {
-              const variant = data.variants[0]
-
-              return variant.price
-            }
-
-            return null
-          },
-        ],
       },
     },
     {
@@ -81,10 +89,10 @@ export const Products: CollectionConfig = {
                 id: variant.images[0],
               })
 
-              return mediaDoc.url
+              data.thumbnail = mediaDoc?.url || ''
+              console.log(mediaDoc?.url)
+              console.log('here')
             }
-
-            return ''
           },
         ],
       },
@@ -96,6 +104,37 @@ export const Products: CollectionConfig = {
         {
           name: 'sku',
           type: 'text',
+          unique: true,
+          hooks: {
+            beforeChange: [
+              async ({ data, req }) => {
+                if (!data?.category || !data?.variants) return
+
+                const categoryDoc = await req.payload.findByID({
+                  collection: 'categories',
+                  id: data.category,
+                })
+
+                const categoryCode = categoryDoc?.slug
+                if (!categoryCode) {
+                  throw new Error('Category code is missing in the category document.')
+                }
+
+                data.variants = data.variants.map((variant: any) => {
+                  if (!variant.sku) {
+                    variant.sku = generateSKU({
+                      categoryCode,
+                      productId: data.id, // Payload auto-generates _id, or you can use a custom field
+                      color: variant.color,
+                      size: variant.size,
+                    })
+                  }
+
+                  return variant
+                })
+              },
+            ],
+          },
         },
         {
           name: 'color',

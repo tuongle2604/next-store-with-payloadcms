@@ -1,11 +1,16 @@
+"use server";
+import { Page } from "@repo/cms/types";
 import api from "../utils/api";
-import { Page } from "./payload-types";
-async function getHomePage(): Promise<Page> {
-  const result: Page = await api.get(
-    "http://localhost:3000/api/pages/detail-by-slug/home"
-  );
 
-  return result;
+async function getHomePage() {
+  const { data, error } = await api.get<Page>("/api/pages/detail-by-slug/home");
+
+  if (error) {
+    console.error("Error fetching home page:", error);
+    return null;
+  }
+
+  return data as Page;
 }
 
 export { getHomePage };

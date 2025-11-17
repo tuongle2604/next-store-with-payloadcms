@@ -1,5 +1,5 @@
 import { cn, getVariantName } from "@/lib/utils";
-import { YnsLink } from "@/ui/yns-link";
+import { YnsLink } from "@/components/ui/yns-link";
 import { Product } from "@/lib/payload/payload-types";
 
 export default function ProductVariant({

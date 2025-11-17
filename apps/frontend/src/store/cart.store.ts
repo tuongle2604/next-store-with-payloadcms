@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { Media } from "@/types/payload-types";
+import { Media } from "@repo/cms/types";
+import { persist } from "zustand/middleware";
 
 export interface CartItem {
   productId: number;
@@ -9,18 +10,17 @@ export interface CartItem {
   stock: number;
   variantId: string;
   quantity: number;
-}
-
-interface CartModalStore {
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  sku: string;
 }
 
 interface CartStore {
+  isOpenCart: boolean;
   cartItems: CartItem[];
   addToCart: (product: any) => void;
   removeFromCart: (product: any) => void;
   clearCart: () => void;
+  setCartItems: (items: CartItem[]) => void;
+  setIsOpenCart: (flag: boolean) => void;
 }
 
 function handleAddToCart(state: CartStore, cartItem: CartItem) {
@@ -44,20 +44,28 @@ function handleAddToCart(state: CartStore, cartItem: CartItem) {
   return { cartItems: [...state.cartItems, cartItem] };
 }
 
-const useCartStore = create<CartStore>((set) => ({
-  cartItems: [],
-  addToCart: (cartItem: any) =>
-    set((state: CartStore) => handleAddToCart(state, cartItem)),
-  removeFromCart: (product: any) =>
-    set((state: CartStore) => ({
-      cartItems: state.cartItems.filter((item) => item.id !== product.id),
-    })),
-  clearCart: () => set({ cartItems: [] }),
-}));
+const useCartStore = create<CartStore>()(
+  persist(
+    (set) => ({
+      isOpenCart: false,
+      cartItems: [],
+      addToCart: (cartItem: any) =>
+        set((state: CartStore) => handleAddToCart(state, cartItem)),
+      removeFromCart: (product: any) =>
+        set((state: CartStore) => ({
+          cartItems: state.cartItems.filter(
+            (item) => item.productId !== product.id
+          ),
+        })),
+      clearCart: () => set({ cartItems: [] }),
+      setCartItems: (items: CartItem[]) => set({ cartItems: items }),
+      setIsOpenCart: (flag) => set((state) => ({ isOpenCart: flag })),
+    }),
+    {
+      name: "cart",
+      partialize: (state) => ({ cartItems: state.cartItems }),
+    }
+  )
+);
 
-const useCartModal = create<CartModalStore>((set) => ({
-  open: false,
-  setOpen: (open: boolean) => set({ open }),
-}));
-
-export { useCartStore, useCartModal };
+export { useCartStore };

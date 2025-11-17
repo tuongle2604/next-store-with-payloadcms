@@ -1,7 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { CartItem } from "@/store/cart.store";
-import { Media, Product } from "../payload/payload-types";
+// import { Media, Product } from "../payload/payload-types";
+import { Media, Product, Where } from "@repo/cms/types";
+import { stringify } from "qs-esm";
 
 export const isDefined = <T>(value: T | null | undefined): value is T =>
   value !== null && value !== undefined;
@@ -116,53 +118,53 @@ export const formatProductName = (name: string, variant?: string) => {
   return `${name} (${deslugify(variant)})`;
 };
 
-export const calculateCartTotalPossiblyWithTax = (cart: {
-  cart: {
-    amount: number;
-    metadata?: { taxCalculationId?: string };
-  };
-  lines: Array<{
-    product: { default_price?: { unit_amount?: number | null } };
-    quantity: number;
-  }>;
-  shippingRate?: { fixed_amount?: { amount?: number } } | null;
-}) => {
-  if (!cart) {
-    return 0;
-  }
-  if (cart.cart.metadata?.taxCalculationId) {
-    return cart.cart.amount;
-  }
+// export const calculateCartTotalPossiblyWithTax = (cart: {
+//   cart: {
+//     amount: number;
+//     metadata?: { taxCalculationId?: string };
+//   };
+//   lines: Array<{
+//     product: { default_price?: { unit_amount?: number | null } };
+//     quantity: number;
+//   }>;
+//   shippingRate?: { fixed_amount?: { amount?: number } } | null;
+// }) => {
+//   if (!cart) {
+//     return 0;
+//   }
+//   if (cart.cart.metadata?.taxCalculationId) {
+//     return cart.cart.amount;
+//   }
 
-  return (
-    (cart.shippingRate?.fixed_amount?.amount ?? 0) +
-    calculateCartTotalNetWithoutShipping(cart)
-  );
-};
+//   return (
+//     (cart.shippingRate?.fixed_amount?.amount ?? 0) +
+//     calculateCartTotalNetWithoutShipping(cart)
+//   );
+// };
 
-export const calculateCartTotalNetWithoutShipping = (cart: {
-  cart: {
-    amount: number;
-    metadata?: { taxCalculationId?: string };
-  };
-  lines: Array<{
-    product: { default_price?: { unit_amount?: number | null } };
-    quantity: number;
-  }>;
-  shippingRate?: { fixed_amount?: { amount?: number } } | null;
-}) => {
-  if (!cart) {
-    return 0;
-  }
+// export const calculateCartTotalNetWithoutShipping = (cart: {
+//   cart: {
+//     amount: number;
+//     metadata?: { taxCalculationId?: string };
+//   };
+//   lines: Array<{
+//     product: { default_price?: { unit_amount?: number | null } };
+//     quantity: number;
+//   }>;
+//   shippingRate?: { fixed_amount?: { amount?: number } } | null;
+// }) => {
+//   if (!cart) {
+//     return 0;
+//   }
 
-  return cart.lines.reduce(
-    (total, { product, quantity }) =>
-      total + (product.default_price?.unit_amount ?? 0) * quantity,
-    0
-  );
-};
+//   return cart.lines.reduce(
+//     (total, { product, quantity }) =>
+//       total + (product.default_price?.unit_amount ?? 0) * quantity,
+//     0
+//   );
+// };
 
-type Money = { amount: number; currency: string };
+type Money = { amount: number | null | undefined; currency: string };
 
 export function invariant(
   condition: unknown,
@@ -209,6 +211,9 @@ export const formatMoney = ({
   currency,
   locale = "en-US",
 }: Money & { locale?: string }) => {
+  if (!amount) {
+    return amount;
+  }
   // const amount = getDecimalFromStripeAmount({ amount: minor, currency });
   // console.log("amount", amount);
   return new Intl.NumberFormat(locale, {
@@ -249,7 +254,7 @@ const stripeCurrencies: Record<string, number> = {
   TND: 3,
 };
 
-export const calculateCartTotal = (cartItems: CartItem[]) => {
+const calculateCartTotal = (cartItems: CartItem[]) => {
   return cartItems.reduce((total: number, item) => {
     const itemPrice = item.price * item.quantity;
     return total + itemPrice;
@@ -276,4 +281,28 @@ const getImagFromProduct = (product: Product): Media | null => {
   return getImageFromVariant(defaultVariant);
 };
 
-export { getImageFromVariant, getImagFromProduct };
+// const getProductLink = (product: Product) => {
+//   if (
+//     !product.category ||
+//     typeof product.category === "string" ||
+//     typeof product.category === "number"
+//   ) {
+//     return "";
+//   }
+
+//   return `/${product.category.slug}/${product.slug}`;
+// };
+
+const buildQuery = (params: RestParams = {}, query: Where = {}) => {
+  return stringify({
+    where: query,
+    ...params,
+  });
+};
+
+export {
+  calculateCartTotal,
+  getImageFromVariant,
+  getImagFromProduct,
+  buildQuery,
+};
