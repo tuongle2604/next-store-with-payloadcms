@@ -11,13 +11,13 @@ This repository is a Turborepo-powered monorepo containing:
 ## 📁 Project Structure
 
 /
-├── apps/
-│ ├── frontend/ # Next.js storefront (public site)
-│ └── payloadcms/ # Payload CMS backend
-├── packages/
-│ ├── schemas
-│ ├── shared-data
-└── turbo.json # Turborepo task pipeline
+|- apps/
+| |- frontend/ # Next.js storefront (public site)
+| \- payloadcms/ # Payload CMS backend
+|- packages/
+| |- schemas
+| \- shared-data
+\- turbo.json # Turborepo task pipeline
 
 ---
 
@@ -50,34 +50,34 @@ Frontend (apps/frontend/.env)
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=XXXXXXXXXXXXXX
 ```
 
-Payloadcms (apps/cms/.env)
+Payloadcms (apps/payloadcms/.env)
 
 ```sh
-  APP_ENV=development   # or: production
+APP_ENV=development   # or: production
 
-  PAYLOAD_SECRET=XXXXXXXXXXXXXX
-  DATABASE_URI=postgres://USER:PASS@HOST:5432/DATABASE
-  NEXT_PUBLIC_CLIENT_URL=http://localhost:8080
-  NEXT_PUBLIC_SERVER_URL=http://localhost:3000
-  # Added by Payload
+PAYLOAD_SECRET=XXXXXXXXXXXXXX
+DATABASE_URI=postgres://USER:PASS@HOST:5432/DATABASE
+NEXT_PUBLIC_CLIENT_URL=http://localhost:8080
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+# Added by Payload
 
-  SMTP_SERVICE=gmail
-  SMTP_USER=XXXXXXXXXXXXXX@gmail.com
-  SMTP_PASS=XXXXXXXXXXXXXX
-  EMAIL_FROM_NAME=NextStore
-  EMAIL_FROM_ADDRESS=XXXXXXXXXXXXXX@gmail.com
+SMTP_SERVICE=gmail
+SMTP_USER=XXXXXXXXXXXXXX@gmail.com
+SMTP_PASS=XXXXXXXXXXXXXX
+EMAIL_FROM_NAME=NextStore
+EMAIL_FROM_ADDRESS=XXXXXXXXXXXXXX@gmail.com
 
-  S3_BUCKET=XXXXXXXXXXXXXX
-  S3_ENDPOINT=https://<bucket>.s3.<region>.amazonaws.com
-  S3_REGION=XXXXXXXXXXXXXX
-  S3_ACCESS_KEY_ID=XXXXXXXXXXXXXX
-  S3_SECRET_ACCESS_KEY=XXXXXXXXXXXXXX
+S3_BUCKET=XXXXXXXXXXXXXX
+S3_ENDPOINT=https://<bucket>.s3.<region>.amazonaws.com
+S3_REGION=XXXXXXXXXXXXXX
+S3_ACCESS_KEY_ID=XXXXXXXXXXXXXX
+S3_SECRET_ACCESS_KEY=XXXXXXXXXXXXXX
 
-  STRIPE_SECRET_KEY=XXXXXXXXXXXXXX
-  STRIPE_PUBLIC_KEY=XXXXXXXXXXXXXX
+STRIPE_SECRET_KEY=XXXXXXXXXXXXXX
+STRIPE_PUBLIC_KEY=XXXXXXXXXXXXXX
 ```
 
-# APP_ENV
+### APP_ENV
 
 Controls how Payload handles file uploads:
 
