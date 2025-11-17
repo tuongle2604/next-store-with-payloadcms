@@ -11,13 +11,13 @@ This repository is a Turborepo-powered monorepo containing:
 ## 📁 Project Structure
 
 /
-|- apps/
-| |- frontend/ # Next.js storefront (public site)
-| \- payloadcms/ # Payload CMS backend
-|- packages/
-| |- schemas
-| \- shared-data
-\- turbo.json # Turborepo task pipeline
+├── apps/
+│ ├── frontend/ # Next.js storefront (public site)
+│ └── payloadcms/ # Payload CMS backend
+├── packages/
+│ ├── schemas
+│ ├── shared-data
+└── turbo.json # Turborepo task pipeline
 
 ---
 
