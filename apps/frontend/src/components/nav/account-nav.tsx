@@ -18,7 +18,7 @@ export function AccountNav({ customer }: AccountNavProps) {
   }, []);
 
   return (
-    <YnsLink href={isAuthenticated ? "/account" : "/login"}>
+    <YnsLink href={isAuthenticated ? "/account" : "/auth/login"}>
       <UserIcon className="hover:text-neutral-500" />
     </YnsLink>
   );

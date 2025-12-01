@@ -1,0 +1,8 @@
+node_modules
+.next
+public/media
+scripts
+.platform
+src/migrations
+*.log
+Dockerrun.*

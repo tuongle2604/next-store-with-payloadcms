@@ -1,5 +1,14 @@
-import PageTemplate, { generateMetadata } from './[slug]/page'
+// import PageTemplate, { generateMetadata } from './[slug]/page'
 
-export default PageTemplate
+// export const dynamic = 'force-dynamic'
 
-export { generateMetadata }
+// export default PageTemplate
+
+// export { generateMetadata }
+import { redirect } from 'next/navigation'
+
+export default async function Page() {
+  redirect('/admin')
+
+  // ...
+}

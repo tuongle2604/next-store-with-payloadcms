@@ -1,11 +1,13 @@
-build
-dist / media
+#./build
+dist/media
 node_modules
 .DS_Store
 .env*
 .next
 .vercel
-
+.platform/env
+certs/*
+# Dockerrun.*
 # Payload default media upload directory
 public/media/
 

@@ -8,10 +8,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { publicUrl } from "@/env.mjs";
 import { getLocale, getTranslations } from "@/i18n/server";
 import { getProductDetail } from "@/lib/payload/product";
-import { getRecommendedProducts } from "@/lib/search/trieve";
 import { cn, deslugify, formatMoney, formatProductName } from "@/lib/utils";
 // import type { TrieveProductMetadata } from "@/scripts/upload-trieve";
 import { AddToCartButton } from "@/components/ui/add-to-cart-button";
@@ -88,7 +86,7 @@ export default async function SingleProductPage(props: {
 
   if (searchParams.variant) {
     selectedVariant = product.variants?.find(
-      (v) => getVariantName(v) === variant
+      (v) => getVariantName(v) === variant,
     );
   }
 
@@ -114,7 +112,7 @@ export default async function SingleProductPage(props: {
           <BreadcrumbItem>
             <BreadcrumbLink
               asChild
-              className="inline-flex items-center justify-center min-h-12 min-w-12"
+              className="inline-flex min-h-12 min-w-12 items-center justify-center"
             >
               <YnsLink href="/products">{t("allProducts")}</YnsLink>
             </BreadcrumbLink>
@@ -124,7 +122,7 @@ export default async function SingleProductPage(props: {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  className="inline-flex items-center justify-center min-h-12 min-w-12"
+                  className="inline-flex min-h-12 min-w-12 items-center justify-center"
                   asChild
                 >
                   <YnsLink href={`/category/${category.slug}`}>
@@ -152,13 +150,13 @@ export default async function SingleProductPage(props: {
       </Breadcrumb>
 
       {/* <StickyBottom cartItem={cartItem} locale={locale}> */}
-      <div className="grid gap-4 mt-4 lg:grid-cols-12">
+      <div className="mt-4 grid gap-4 lg:grid-cols-12">
         <div className="lg:col-span-5 lg:col-start-8">
-          <h1 className="text-3xl font-bold leading-none tracking-tight text-foreground">
+          <h1 className="text-foreground text-3xl leading-none font-bold tracking-tight">
             {product.name}
           </h1>
           {selectedVariant && (
-            <p className="mt-2 text-2xl font-medium leading-none tracking-tight text-foreground/70">
+            <p className="text-foreground/70 mt-2 text-2xl leading-none font-medium tracking-tight">
               {formatMoney({
                 amount: selectedVariant.price,
                 currency: "USD",
@@ -179,19 +177,19 @@ export default async function SingleProductPage(props: {
           <div className="grid gap-4 lg:grid-cols-3 [&>*:first-child]:col-span-3">
             <MainProductImage
               key={getImageFromVariant(selectedVariant)?.id}
-              className="object-cover object-center w-full transition-opacity rounded-lg bg-neutral-100"
+              className="w-full rounded-lg bg-neutral-100 object-cover object-center transition-opacity"
               src={getImageFromVariant(selectedVariant)?.url || ""}
               loading="eager"
               priority
               alt=""
             />
           </div>
-          <div className="grid grid-cols-4 gap-4 mt-4 lg:grid-cols-5 lg:gap-4">
+          <div className="mt-4 grid grid-cols-4 gap-4 lg:grid-cols-5 lg:gap-4">
             {images.map((image, idx) => {
               return (
                 <Image
                   key={image?.id || idx}
-                  className="object-cover object-center w-full transition-opacity rounded-lg bg-neutral-100"
+                  className="w-full rounded-lg bg-neutral-100 object-cover object-center transition-opacity"
                   src={image?.url || ""}
                   width={160}
                   height={160}

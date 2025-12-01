@@ -36,7 +36,6 @@ export default function ResetPassword() {
   async function onSubmit(values: z.infer<typeof resetPasswordFormSchema>) {
     try {
       // Assuming an async reset password function
-      console.log(values);
       toast.success(
         "Password reset successful. You can now log in with your new password."
       );

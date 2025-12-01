@@ -1,15 +1,23 @@
 import { withPayload } from '@payloadcms/next/withPayload'
-
+import path from 'path'
 import redirects from './redirects.js'
 
-const NEXT_PUBLIC_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-
 /** @type {import('next').NextConfig} */
+
+const __dirname = import.meta.dirname
+
 const nextConfig = {
   output: 'standalone',
+  outputFileTracingRoot: path.join(__dirname, '../../'),
+  // env: {
+  //   IMAGE_BASE_URL: process.env.IMAGE_BASE_URL,
+  //   APP_ENV: process.env.APP_ENV,
+  // },
   typescript: {
-    // Ignore type errors in Payload's generated types
     ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
   async headers() {
     return [
@@ -27,14 +35,16 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
-        const url = new URL(item)
+      ...[process.env.NEXT_PUBLIC_SERVER_URL, process.env.S3_ENDPOINT, process.env.IMAGE_BASE_URL]
+        .filter((o) => o)
+        .map((item) => {
+          const url = new URL(item)
 
-        return {
-          hostname: url.hostname,
-          protocol: url.protocol.replace(':', ''),
-        }
-      }),
+          return {
+            hostname: url.hostname,
+            protocol: url.protocol.replace(':', ''),
+          }
+        }),
     ],
   },
   reactStrictMode: true,

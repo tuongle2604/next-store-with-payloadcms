@@ -100,8 +100,8 @@ export default function LoginForm({
                               Confirm Password
                             </FormLabel>
                             <Link
-                              href={"/forgot-password"}
-                              className="ml-auto text-sm underline underline-offset-2 text-muted-foreground hover:text-primary"
+                              href={"/auth/forgot-password"}
+                              className="text-muted-foreground hover:text-primary ml-auto text-sm underline underline-offset-2"
                             >
                               Forgot Password?
                             </Link>
@@ -127,8 +127,9 @@ export default function LoginForm({
           </Form>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-sm  [&_a]:font-bold hover:[&_a]:underline [&_a]:underline-offset-4 ">
-        Don't have an account? <Link href={"/register"}>Register now!</Link>
+      <div className="text-center text-sm text-balance [&_a]:font-bold [&_a]:underline-offset-4 hover:[&_a]:underline">
+        Don't have an account?{" "}
+        <Link href={"/auth/register"}>Register now!</Link>
       </div>
     </div>
   );

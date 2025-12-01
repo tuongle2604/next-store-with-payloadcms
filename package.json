@@ -1,21 +1,21 @@
 {
-  "name": "yournextstore-with-payloadcms",
+  "name": "next-store-with-payloadcms",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run @repo/cms#build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prune:cms": "turbo prune @repo/cms --docker --use-gitignore=false",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "prettier": "^3.5.3",
-    "turbo": "^2.5.3",
-    "typescript": "5.8.2"
+    "prettier": "3.6.2",
+    "turbo": "^2.5.3"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.24.0",
   "engines": {
-    "node": ">=18"
+    "node": "^20.11.1 || ^22.0.0"
   },
   "pnpm": {
     "ignoredBuiltDependencies": [

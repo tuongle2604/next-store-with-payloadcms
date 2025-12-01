@@ -1,8 +1,8 @@
 import type { Metadata } from 'next/types'
 
-import { CollectionArchive } from '@cms/components/CollectionArchive'
-import { PageRange } from '@cms/components/PageRange'
-import { Pagination } from '@cms/components/Pagination'
+import { CollectionArchive } from '@/components/CollectionArchive'
+import { PageRange } from '@/components/PageRange'
+import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -11,7 +11,6 @@ import PageClient from './page.client'
 export const dynamic = 'force-static'
 export const revalidate = 600
 
-console.log(configPromise)
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
 

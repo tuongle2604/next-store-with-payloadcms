@@ -1,4 +1,3 @@
-import { publicUrl } from "@/env.mjs";
 import { getHomePage, getProducts } from "@/lib/payload";
 import { Media } from "@repo/cms/types";
 import StoreConfig from "@/store.config";
@@ -9,7 +8,7 @@ import Image from "next/image";
 import type { Metadata } from "next/types";
 
 export const metadata = {
-  alternates: { canonical: publicUrl },
+  alternates: { canonical: process.env.NEXT_PUBLIC_BASE_URL },
 } satisfies Metadata;
 
 export default async function Home() {
@@ -27,15 +26,15 @@ export default async function Home() {
 
   return (
     <main>
-      <section className="py-8 rounded bg-neutral-100 sm:py-12">
-        <div className="grid items-center grid-cols-1 gap-8 px-8 mx-auto justify-items-center sm:px-16 md:grid-cols-2">
+      <section className="rounded bg-neutral-100 py-8 sm:py-12">
+        <div className="mx-auto grid grid-cols-1 items-center justify-items-center gap-8 px-8 sm:px-16 md:grid-cols-2">
           <div className="max-w-md space-y-4">
             <h2 className="text-3xl font-bold tracking-tight text-balance md:text-4xl">
               {title}
             </h2>
             <p className="text-pretty text-neutral-600">{description}</p>
             <YnsLink
-              className="inline-flex items-center justify-center h-10 px-6 font-medium transition-colors rounded-full bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 focus:outline-hidden focus:ring-1 focus:ring-neutral-950"
+              className="inline-flex h-10 items-center justify-center rounded-full bg-neutral-900 px-6 font-medium text-neutral-50 transition-colors hover:bg-neutral-900/90 focus:ring-1 focus:ring-neutral-950 focus:outline-hidden"
               href={actionLink?.url || ""}
             >
               {actionLink?.label}

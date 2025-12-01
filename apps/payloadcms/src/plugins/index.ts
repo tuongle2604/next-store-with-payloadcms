@@ -5,14 +5,16 @@ import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { Plugin } from 'payload'
-import { revalidateRedirects } from '@cms/hooks/revalidateRedirects'
+import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
-import { searchFields } from '@cms/search/fieldOverrides'
-import { beforeSyncWithSearch } from '@cms/search/beforeSync'
-
-import { Page, Post } from '@cms/payload-types'
-import { getServerSideURL } from '@cms/utilities/getURL'
+import { searchFields } from '@/search/fieldOverrides'
+import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { admins } from '@/access/admin'
+import { anyone } from '@/access/anyone'
+import { guest } from '@/access/guest'
+import { Page, Post } from '@/payload-types'
+import { getServerSideURL } from '@/utilities/getURL'
 
 import { s3Storage } from '@payloadcms/storage-s3'
 import { Media } from '../collections/Media'
@@ -27,12 +29,16 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
 
-console.log('process.env.NODE_ENV ', process.env.APP_ENV)
-
 export const plugins: Plugin[] = [
   redirectsPlugin({
     collections: ['pages', 'posts'],
     overrides: {
+      access: {
+        create: admins,
+        read: guest,
+        update: admins,
+        delete: admins,
+      },
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
@@ -63,8 +69,15 @@ export const plugins: Plugin[] = [
   formBuilderPlugin({
     fields: {
       payment: false,
+      // email: false,
     },
     formOverrides: {
+      access: {
+        create: admins,
+        read: guest,
+        update: admins,
+        delete: admins,
+      },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {
@@ -86,15 +99,15 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  searchPlugin({
-    collections: ['posts', 'products'],
-    beforeSync: beforeSyncWithSearch,
-    searchOverrides: {
-      fields: ({ defaultFields }) => {
-        return [...defaultFields, ...searchFields]
-      },
-    },
-  }),
+  // searchPlugin({
+  //   collections: ['posts', 'products'],
+  //   beforeSync: beforeSyncWithSearch,
+  //   searchOverrides: {
+  //     fields: ({ defaultFields }) => {
+  //       return [...defaultFields, ...searchFields]
+  //     },
+  //   },
+  // }),
   // payloadCloudPlugin(),
   s3Storage({
     collections: {
@@ -103,7 +116,7 @@ export const plugins: Plugin[] = [
         disableLocalStorage: true,
         disablePayloadAccessControl: true,
         generateFileURL: async ({ filename }: { filename: string }) => {
-          return `${process.env.S3_ENDPOINT}/media/${filename}`
+          return `${process.env.IMAGE_BASE_URL}/media/${filename}`
         },
       },
     },

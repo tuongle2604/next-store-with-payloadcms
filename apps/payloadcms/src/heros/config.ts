@@ -7,7 +7,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
-import { linkGroup } from '@cms/fields/linkGroup'
+import { linkGroup } from '@/fields/linkGroup'
 
 export const hero: Field = {
   name: 'hero',

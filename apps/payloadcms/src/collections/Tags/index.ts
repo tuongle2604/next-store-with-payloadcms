@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
 import { anyone } from '../../access/anyone'
-import { slugField } from '@cms/fields/slug'
+import { slugField } from '@/fields/slug'
 import { admins } from '@/access/admin'
 
 export const Tags: CollectionConfig = {

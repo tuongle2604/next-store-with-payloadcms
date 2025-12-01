@@ -1,41 +1,27 @@
 {
-  // "extends": "../../tsconfig.base.json",
+  "extends": "@repo/ts-config/next.json",
   "$schema": "https://json.schemastore.org/tsconfig.json",
   "compilerOptions": {
-    "composite": true,
     "baseUrl": ".",
-    "target": "ES2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "allowUnreachableCode": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": false,
-    "noUncheckedIndexedAccess": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "paths": {
-      "@/*": ["./src/*"],
-      // "@ui/*": ["./src/components/ui/*"],
-      "@lib/*": ["./src/lib/*"],
-      // "@/components/ui/*": ["./src/ui/shadcn/*"],
-      "@repo/cms/*": ["../payloadcms/src/*"],
-      "@repo/schemas/*": ["../../packages/schemas/src/*"],
-      "@repo/shared-data/*": ["../../packages/shared-data/src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ],
+      "@repo/cms/*": [
+        "../payloadcms/src/*"
+      ],
+      "@repo/schemas/*": [
+        "../../packages/schemas/src/*"
+      ],
+      "@repo/shared-data/*": [
+        "../../packages/shared-data/src/*"
+      ]
+    },
+    "noEmit": true,
+    "jsx": "preserve"
   },
   "include": [
     "next-fix.d.ts",
@@ -45,10 +31,19 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "src/script/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "src/script/**/*.ts"
+  ],
   "references": [
-    { "path": "../payloadcms" },
-    { "path": "../../packages/schemas" },
-    { "path": "../../packages/shared-data" }
+    {
+      "path": "../payloadcms"
+    },
+    {
+      "path": "../../packages/schemas"
+    },
+    {
+      "path": "../../packages/shared-data"
+    }
   ]
 }

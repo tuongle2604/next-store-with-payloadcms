@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 // import { forgotPasswordFormSchema } from "@/lib/form-schema";
 import { forgotPasswordFormSchema } from "@repo/schemas/form-schemas";
 import { forgotPassword } from "@/lib/payload/auth";
+
 export default function ForgetPassword() {
   const form = useForm<z.infer<typeof forgotPasswordFormSchema>>({
     resolver: zodResolver(forgotPasswordFormSchema),

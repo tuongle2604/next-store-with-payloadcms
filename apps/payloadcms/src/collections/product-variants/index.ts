@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload'
 import { authenticated } from '@/access/authenticated'
 import { admins } from '@/access/admin'
-
+import { anyone } from '@/access/anyone'
 export const ProductVariants: CollectionConfig = {
   slug: 'product-variants',
   admin: {
@@ -11,7 +11,7 @@ export const ProductVariants: CollectionConfig = {
     admin: authenticated,
     create: admins,
     delete: admins,
-    read: () => true,
+    read: anyone,
     update: admins,
   },
   fields: [

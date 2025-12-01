@@ -32,16 +32,16 @@ export function RegisterSuccess({
 
   useEffect(() => {
     if (!email) {
-      router.push("/login");
+      router.push("/auth/login");
     }
   }, []);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+      <Card className="mx-auto w-full max-w-md">
+        <CardHeader className="space-y-4 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20">
+            <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
           <div className="space-y-2">
             <CardTitle className="text-2xl font-bold">
@@ -63,9 +63,9 @@ export function RegisterSuccess({
           </Alert>
 
           <div className="space-y-4">
-            <div className="text-sm text-muted-foreground space-y-2">
+            <div className="text-muted-foreground space-y-2 text-sm">
               <p>{"Didn't receive the email? Here's what you can do:"}</p>
-              <ul className="list-disc list-inside space-y-1 ml-2">
+              <ul className="ml-2 list-inside list-disc space-y-1">
                 <li>Check your spam or junk folder</li>
                 <li>Make sure the email address is correct</li>
                 <li>Wait a few minutes for the email to arrive</li>
@@ -83,8 +83,8 @@ export function RegisterSuccess({
               </Button> */}
 
               <Button variant="ghost" className="w-full" asChild>
-                <a href="/login">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                <a href="/auth/login">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Login
                 </a>
               </Button>
@@ -93,12 +93,12 @@ export function RegisterSuccess({
         </CardContent>
       </Card>
 
-      <div className="text-center text-xs text-muted-foreground max-w-md mx-auto">
+      <div className="text-muted-foreground mx-auto max-w-md text-center text-xs">
         <p>
           If you continue to have problems, please{" "}
           <a
             href="/support"
-            className="underline underline-offset-4 hover:text-primary"
+            className="hover:text-primary underline underline-offset-4"
           >
             contact our support team
           </a>

@@ -1,4 +1,3 @@
-import { publicUrl } from "@/env.mjs";
 import { getTranslations } from "@/i18n/server";
 import { ProductList } from "@/components/products/product-list";
 import * as Commerce from "commerce-kit";
@@ -8,7 +7,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations("/products.metadata");
   return {
     title: t("title"),
-    alternates: { canonical: `${publicUrl}/products` },
+    alternates: { canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products` },
   };
 };
 
@@ -18,7 +17,7 @@ export default async function AllProductsPage() {
 
   return (
     <main className="pb-8">
-      <h1 className="text-3xl font-bold leading-none tracking-tight text-foreground">
+      <h1 className="text-foreground text-3xl leading-none font-bold tracking-tight">
         {t("title")}
       </h1>
       <ProductList products={products} />

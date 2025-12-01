@@ -14,7 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/shadcn/form";
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { cn } from "@/lib/utils";
@@ -52,13 +52,13 @@ export default function RegisterForm({
 
     if (error || !data) {
       return toast.error(
-        error?.message || "Register failed. Please try again."
+        error?.message || "Register failed. Please try again.",
       );
     }
 
     // setCustomer(data);
     setValue(data?.user?.email);
-    router.push("/register/success");
+    router.push("/auth/register/success");
   }
 
   return (
@@ -140,8 +140,8 @@ export default function RegisterForm({
           </Form>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-sm  [&_a]:font-bold hover:[&_a]:underline [&_a]:underline-offset-4 ">
-        Already have an account? <Link href={"/login"}>Login here!</Link>
+      <div className="text-center text-sm text-balance [&_a]:font-bold [&_a]:underline-offset-4 hover:[&_a]:underline">
+        Already have an account? <Link href={"/auth/login"}>Login here!</Link>
         {/* By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>. */}
       </div>

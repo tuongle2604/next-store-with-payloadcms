@@ -1,6 +1,6 @@
-const nodemailer = require('nodemailer')
-
-import { getCachedGlobal } from './getGlobals'
+// const nodemailer = require('nodemailer')
+import nodemailer from 'nodemailer'
+// import { getCachedGlobal } from './getGlobals'
 
 type EmailPayload = {
   to: string
@@ -12,8 +12,6 @@ type EmailResponse = {
   success: boolean
   messageId: string
 }
-
-console.log(process.env.GMAIL_PASSWORD)
 
 const createEmailTransporter = async () => {
   // const { smtp } = await getCachedGlobal('emailMessages', 'en', 1)()

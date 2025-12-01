@@ -1,8 +1,8 @@
 import type React from 'react'
-import type { Page, Post } from '@cms/payload-types'
+import type { Page, Post } from '@/payload-types'
 
-import { getCachedDocument } from '@cms/utilities/getDocument'
-import { getCachedRedirects } from '@cms/utilities/getRedirects'
+import { getCachedDocument } from '@/utilities/getDocument'
+import { getCachedRedirects } from '@/utilities/getRedirects'
 import { notFound, redirect } from 'next/navigation'
 
 interface Props {

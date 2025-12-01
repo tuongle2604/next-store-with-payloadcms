@@ -1,4 +1,3 @@
-import { publicUrl } from "@/env.mjs";
 import { getTranslations } from "@/i18n/server";
 import { deslugify } from "@/lib/utils";
 import { ProductList } from "@/components/products/product-list";
@@ -37,7 +36,7 @@ export default async function CategoryPage(props: {
       "category.slug": {
         equals: params.slug,
       },
-    }
+    },
   );
 
   if (products.length === 0) {
@@ -48,7 +47,7 @@ export default async function CategoryPage(props: {
 
   return (
     <main className="pb-8">
-      <h1 className="text-3xl font-bold leading-none tracking-tight text-foreground">
+      <h1 className="text-foreground text-3xl leading-none font-bold tracking-tight">
         {deslugify(params.slug)}
         {/* <div className="text-lg font-semibold text-muted-foreground">
           {t("title", { categoryName: deslugify(params.slug) })}

@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-// import { decrypt, updateSession } from "./lib/auth";
-
-const authenticatedPaths = ["/account", "/orders", "/cart"];
-const redirectPaths = ["/login", "/register", "/forgot-password"];
+import { decodeJWT } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
   // const token = request.cookies.get("payload-token")?.value;
@@ -23,6 +20,6 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};
+// export const config = {
+//   matcher: ["/account/:path*", "/account"],
+// };

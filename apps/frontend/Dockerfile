@@ -1,67 +1,50 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
-# Install dependencies only when needed
-FROM base AS deps
+# This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
+# Make sure you update both files!
 
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+# RUN apk update
 RUN apk add --no-cache libc6-compat
+RUN npm install -g pnpm turbo
 WORKDIR /app
+# RUN corepack enable pnpm
+# RUN pnpm add turbo --global
+# RUN corepack enable && corepack prepare pnpm@latest --activate && corepack prepare turbo@latest --activate
+# Set working directory
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# ---
+FROM base AS prepare
 COPY . .
+# Add lockfile and package.json's of isolated subworkspace
+RUN turbo prune @repo/frontend --docker --use-gitignore=false
 
-# Uncomment to disable Next.js telemetry
-# ENV NEXT_TELEMETRY_DISABLED 1
+# ---
+FROM base AS builder
+# First install the dependencies (as they change less often)
+COPY --from=prepare /app/out/json/ .
+RUN pnpm install --frozen-lockfile
+# Build the project
+COPY --from=prepare /app/out/full/ .
 
-# Build the Next.js application
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN pnpm turbo build
 
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-
-# Uncomment to disable Next.js telemetry
-# ENV NEXT_TELEMETRY_DISABLED 1
-
+# ---
+FROM node:22-alpine AS runner
+# Don't run production as root for security reasons
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
+USER nextjs
+WORKDIR /app
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/static ./apps/frontend/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/public ./apps/frontend/public
 
-USER nextjs
+ENV NODE_ENV=production
+ENV PORT=8080
 
-EXPOSE 3000
+EXPOSE 8080
 
-ENV PORT 3000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD node apps/frontend/server.js

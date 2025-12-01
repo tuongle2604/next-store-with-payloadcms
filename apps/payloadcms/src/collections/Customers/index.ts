@@ -35,7 +35,7 @@ export const Customers: CollectionConfig = {
       generateEmailHTML: async ({ req, token, user }) => {
         return await render(
           await VerifyAccountEmail({
-            url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/verify-email?token=${token}`,
+            url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/auth/verify-email?token=${token}`,
             name: user.fullName ?? 'Customer',
           }),
         )

@@ -1,6 +1,7 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import fs from 'fs'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -20,20 +21,26 @@ import { Tags } from './collections/Tags'
 import { Header } from './Header/config'
 import { Footer } from './Footer/config'
 import { plugins } from './plugins'
-import { defaultLexical } from '@cms/fields/defaultLexical'
-import { getServerSideURL } from './utilities/getURL'
+import { defaultLexical } from '@/fields/defaultLexical'
+// import { getServerSideURL } from './utilities/getURL'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const sslPath = path.join(dirname, '..', 'certs', 'ssl-key.pem')
 
 export default buildConfig({
   admin: {
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
-      beforeLogin: ['@cms/components/BeforeLogin'],
+      beforeLogin: ['@/components/BeforeLogin'],
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: ['@cms/components/BeforeDashboard'],
+      // beforeDashboard: ['@/components/BeforeDashboard'],
+    },
+    autoLogin: {
+      email: 'guest@gmail.com',
+      password: 'guest',
+      prefillOnly: true,
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -62,20 +69,24 @@ export default buildConfig({
       ],
     },
   },
-  // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
+      ssl:
+        process.env.APP_ENV === 'production'
+          ? {
+              rejectUnauthorized: false,
+              ca: fs.readFileSync(sslPath).toString(),
+            }
+          : false,
     },
   }),
   email: nodemailerAdapter({
     defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || '', //"Store" <testonly999999@gmail.com>
     defaultFromName: process.env.EMAIL_FROM_NAME || '',
-    // Any Nodemailer transport
     transportOptions: {
-      // This is where we'll provide SendGrid information (next step)
-      service: process.env.SMTP_SERVICE,
+      host: process.env.SMTP_SERVICE,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -83,7 +94,6 @@ export default buildConfig({
     },
   }),
   folders: {
-    // debug: true, // optional
     collectionOverrides: [
       async ({ collection }) => {
         return collection
@@ -92,9 +102,10 @@ export default buildConfig({
     fieldName: 'folder', // optional
     slug: 'payload-folders', // optional
   },
+  // logger: 'sync',
   collections: [Customers, Pages, Posts, Media, Categories, Users, Products, Tags, Orders],
   // cors: [getServerSideURL()].filter(Boolean),
-  cors: [process.env.NEXT_PUBLIC_CLIENT_URL || ''],
+  cors: [process.env.NEXT_PUBLIC_CLIENT_URL || 'http://localhost:8080'].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
     ...plugins,
@@ -110,19 +121,27 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  jobs: {
-    access: {
-      run: ({ req }: { req: PayloadRequest }): boolean => {
-        // Allow logged in users to execute this endpoint (default)
-        if (req.user) return true
+  // jobs: {
+  //   access: {
+  //     run: ({ req }: { req: PayloadRequest }): boolean => {
+  //       // Allow logged in users to execute this endpoint (default)
+  //       if (req.user) return true
 
-        // If there is no logged in user, then check
-        // for the Vercel Cron secret to be present as an
-        // Authorization header:
-        const authHeader = req.headers.get('authorization')
-        return authHeader === `Bearer ${process.env.CRON_SECRET}`
-      },
-    },
-    tasks: [],
-  },
+  //       // If there is no logged in user, then check
+  //       // for the Vercel Cron secret to be present as an
+  //       // Authorization header:
+  //       const authHeader = req.headers.get('authorization')
+  //       return authHeader === `Bearer ${process.env.CRON_SECRET}`
+  //     },
+  //   },
+  //   tasks: [],
+  // },
+  // hooks: {
+  //   afterError: [
+  //     async ({ error, req }) => {
+  //       console.log('Payload Error')
+  //       req.payload.logger.error(error)
+  //     },
+  //   ],
+  // },
 })

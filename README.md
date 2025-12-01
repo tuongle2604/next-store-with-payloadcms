@@ -18,10 +18,10 @@ This repository is a Turborepo-powered monorepo containing:
 ├── packages/
 │ ├── schemas
 │ ├── shared-data
-└── turbo.json # Turborepo task pipeline
+└── turbo.json
 ```
 
----
+<!-- ---
 
 ## 🚀 Applications
 
@@ -29,19 +29,15 @@ This repository is a Turborepo-powered monorepo containing:
 
 - App Router + Server Components
 - Fetches catalog, categories, and media from the Payload CMS API
-- Static assets delivered through S3 + CloudFront
 - Supports SSR/ISR for product pages
 - Uses shared schemas for strong typing between frontend and backend
 
 ### `payloadcms/` — Payload CMS Backend
 
 - Manages products, categories, orders, customers, media
-- PostgreSQL support (RDS recommended for production)
-- Media storage via S3
 - Authentication, access control, admin UI out-of-the-box
-- Deployable to Elastic Beanstalk
 
----
+--- -->
 
 ## Environment Variables
 

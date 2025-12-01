@@ -32,7 +32,7 @@ export function EmailVerify({
       if (!token) {
         setStatus("error");
         setMessage(
-          "Invalid verification link. Please check your email for the correct link."
+          "Invalid verification link. Please check your email for the correct link.",
         );
         return;
       }
@@ -46,7 +46,7 @@ export function EmailVerify({
 
       setStatus("success");
       setMessage(
-        "Your email has been successfully verified! You can now log in to your account."
+        "Your email has been successfully verified! You can now log in to your account.",
       );
     };
 
@@ -61,14 +61,14 @@ export function EmailVerify({
   const getStatusIcon = () => {
     switch (status) {
       case "loading":
-        return <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />;
+        return <Loader2 className="h-8 w-8 animate-spin text-blue-600" />;
       case "success":
         return (
-          <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+          <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
         );
       case "error":
       case "expired":
-        return <XCircle className="w-8 h-8 text-red-600 dark:text-red-400" />;
+        return <XCircle className="h-8 w-8 text-red-600 dark:text-red-400" />;
     }
   };
 
@@ -99,12 +99,12 @@ export function EmailVerify({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="text-center space-y-4">
+      <Card className="mx-auto w-full max-w-md">
+        <CardHeader className="space-y-4 text-center">
           <div
             className={cn(
-              "mx-auto w-16 h-16 rounded-full flex items-center justify-center",
-              getStatusColor()
+              "mx-auto flex h-16 w-16 items-center justify-center rounded-full",
+              getStatusColor(),
             )}
           >
             {getStatusIcon()}
@@ -125,7 +125,7 @@ export function EmailVerify({
               status === "success" &&
                 "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950",
               (status === "error" || status === "expired") &&
-                "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+                "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950",
             )}
           >
             <AlertDescription className="text-center">
@@ -136,7 +136,7 @@ export function EmailVerify({
           <div className="flex flex-col gap-3">
             {status === "success" && (
               <Button className="w-full" asChild>
-                <a href="/login">Continue to Login</a>
+                <a href="/auth/login">Continue to Login</a>
               </Button>
             )}
 
@@ -151,7 +151,7 @@ export function EmailVerify({
                   className="w-full bg-transparent"
                   asChild
                 >
-                  <a href="/register">Back to Registration</a>
+                  <a href="/auth/register">Back to Registration</a>
                 </Button>
               </>
             )}
@@ -162,19 +162,19 @@ export function EmailVerify({
                 className="w-full bg-transparent"
                 asChild
               >
-                <a href="/login">Back to Login</a>
+                <a href="/auth/login">Back to Login</a>
               </Button>
             )}
           </div>
         </CardContent>
       </Card>
 
-      <div className="text-center text-xs text-muted-foreground max-w-md mx-auto">
+      <div className="text-muted-foreground mx-auto max-w-md text-center text-xs">
         <p>
           Need help?{" "}
           <a
             href="#upport"
-            className="underline underline-offset-4 hover:text-primary"
+            className="hover:text-primary underline underline-offset-4"
           >
             Contact Support
           </a>

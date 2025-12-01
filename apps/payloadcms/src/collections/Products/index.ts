@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '@/access/authenticated'
+import { anyone } from '@/access/anyone'
 import { admins } from '@/access/admin'
 import { slugField } from '../../fields/slug'
 import { productDetail } from './endpoints/productDetail'
@@ -16,7 +17,7 @@ export const Products: CollectionConfig = {
     admin: authenticated,
     create: admins,
     delete: admins,
-    read: () => true,
+    read: anyone,
     update: admins,
   },
   endpoints: [productDetail, productRelated],
@@ -75,7 +76,7 @@ export const Products: CollectionConfig = {
       admin: {
         hidden: true,
         components: {
-          Cell: '@cms/components/ImageCell',
+          Cell: '@/components/ImageCell',
         },
       },
       hooks: {

@@ -14,6 +14,7 @@ type ErrorResponse = {
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+console.log(BASE_URL);
 
 function buildUrl(path: string, params?: Params): string {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
@@ -21,6 +22,9 @@ function buildUrl(path: string, params?: Params): string {
 }
 
 function hanldeError<T>(error: Error): ApiResponse<T> {
+  console.log("debug api error");
+  console.log(error);
+
   return {
     data: null,
     error: {

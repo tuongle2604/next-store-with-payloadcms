@@ -47,21 +47,23 @@ export const Media: CollectionConfig = {
       }),
     },
   ],
-  // hooks: {
-  //   afterRead: [
-  //     ({ doc }) => {
-  //       console.log('*******')
-  //       console.log('doc.url before:', doc.url)
+  hooks: {
+    afterRead: [
+      ({ doc }) => {
+        const baseUrl = process.env.IMAGE_BASE_URL
+        const isNotFullUrl = !/^https?:\/\//i.test(doc?.url)
+        console.log('base url ', baseUrl)
 
-  //       // const baseUrl = process.env.IMAGE_BASE_URL || ''
-  //       // if (doc.url && typeof doc.url === 'string') {
-  //       //   doc.url = `${baseUrl}${doc.url}`
-  //       // }
+        if (baseUrl && isNotFullUrl) {
+          doc.url = `${baseUrl}/${doc.url}`
+        }
 
-  //       return doc
-  //     },
-  //   ],
-  // },
+        console.log(doc.url)
+
+        return doc
+      },
+    ],
+  },
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
     // adminThumbnail: 'thumbnail',
