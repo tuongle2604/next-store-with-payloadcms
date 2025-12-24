@@ -1,17 +1,12 @@
-FROM node:22-alpine AS base
+# Run this docker file from the root of the monorepo 
 
-# This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
-# Make sure you update both files!
+FROM node:22-alpine AS base
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 # RUN apk update
 RUN apk add --no-cache libc6-compat
 RUN npm install -g pnpm turbo
 WORKDIR /app
-# RUN corepack enable pnpm
-# RUN pnpm add turbo --global
-# RUN corepack enable && corepack prepare pnpm@latest --activate && corepack prepare turbo@latest --activate
-# Set working directory
 
 # ---
 FROM base AS prepare
@@ -26,10 +21,6 @@ COPY --from=prepare /app/out/json/ .
 RUN pnpm install --frozen-lockfile
 # Build the project
 COPY --from=prepare /app/out/full/ .
-
-# Provide build-time DB connection
-ARG DATABASE_URL
-ENV DATABASE_URL=${DATABASE_URL}
 
 RUN pnpm turbo build
 
@@ -49,8 +40,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/payloadcms/certs ./apps/payl
 
 ENV NODE_ENV=production
 ENV PORT=3000
-ARG DATABASE_URL
-ENV DATABASE_URL=${DATABASE_URL}
 
 EXPOSE 3000
 

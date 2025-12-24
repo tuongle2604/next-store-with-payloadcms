@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import type { HTMLAttributes } from "react";
 
 export const SeoH1 = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => {
-	const pathname = usePathname();
-	const El = pathname === "/" ? "h1" : "span";
-	return <El {...props} className={cn("inline-block", className)} />;
+  const pathname = usePathname();
+  const El = pathname === "/" ? "h1" : "span";
+  return <El {...props} className={cn("inline-block", className)} />;
 };

@@ -1,7 +1,6 @@
 "use server";
-import api from "../utils/api";
-import { Where, Product } from "@repo/cms/types";
-import { buildQuery } from "../utils";
+import { Product } from "@repo/cms/types";
+import payloadSDK from "../payloadSDK";
 interface ProductParams {
   page?: number;
   limit?: number;
@@ -9,45 +8,59 @@ interface ProductParams {
   [key: string]: string | number | undefined | null;
 }
 
-async function getProducts(params: ProductParams = {}, query?: Where) {
-  const queryString = buildQuery(params, query);
+async function getProducts(params: ProductParams = {}) {
+  const { data } = await payloadSDK.products.find<PaginatedResult<Product>>(params);
 
-  const { data, error } = await api.get<PaginatedResult<Product>>(
-    `/api/products?${queryString}`
-  );
+  return data?.docs || [];
+}
 
-  if (error) {
-    return [];
-  }
+async function getProductsByCategory(category: string, params: ProductParams) {
+  const { data } = await payloadSDK.products.find<PaginatedResult<Product>>({
+    where: {
+      "category.slug": {
+        equals: category,
+      },
+    },
+    depth: 2,
+  });
 
   return data?.docs || [];
 }
 
 async function getProductDetail(slug: string) {
-  const { data, error } = await api.get<Product>(
-    `/api/products/detail-by-slug/${slug}`
-  );
+  const { data } = await payloadSDK.products.find<PaginatedResult<Product>>({
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+    depth: 2,
+  });
 
-  if (error) {
-    return null;
-  }
-
-  return data;
+  return data?.docs[0];
 }
 
-async function getRelatedProducts(
-  tagIds: number[] | undefined,
-  productId: number
-) {
-  const { data, error } = await api.get<PaginatedResult<Product>>(
-    `/api/products/related-by-tag?tags=${tagIds?.join(",")}&productId=${productId}`
-  );
-
-  if (error) {
-    return [];
-  }
+async function getRelatedProducts(tagIds: number[] | undefined, productId: number) {
+  const { data } = await payloadSDK.products.find<PaginatedResult<Product>>({
+    where: {
+      and: [
+        {
+          tags: {
+            in: tagIds?.join(","),
+          },
+        },
+        {
+          id: {
+            not_equals: productId,
+          },
+        },
+      ],
+    },
+    depth: 1, // optional, depending on your data needs
+    limit: 4, // limit to 4 related products
+  });
 
   return data?.docs || [];
 }
 
-export { getProducts, getProductDetail, getRelatedProducts };
+export { getProducts, getProductsByCategory, getProductDetail, getRelatedProducts };

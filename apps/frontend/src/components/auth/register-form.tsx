@@ -1,20 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { cn } from "@/lib/utils";
@@ -29,10 +16,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useSessionStorage } from "usehooks-ts";
 
-export default function RegisterForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export default function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [, setValue] = useSessionStorage("register-email", "");
 
   const router = useRouter();
@@ -51,9 +35,7 @@ export default function RegisterForm({
     console.log("Register error:", error);
 
     if (error || !data) {
-      return toast.error(
-        error?.message || "Register failed. Please try again.",
-      );
+      return toast.error(error?.message || "Register failed. Please try again.");
     }
 
     // setCustomer(data);
@@ -116,9 +98,7 @@ export default function RegisterForm({
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem className="grid gap-2">
-                          <FormLabel htmlFor="confirmPassword">
-                            Confirm Password
-                          </FormLabel>
+                          <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
                           <FormControl>
                             <PasswordInput placeholder="******" {...field} />
                           </FormControl>
@@ -127,11 +107,7 @@ export default function RegisterForm({
                       )}
                     />
                   </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={form.formState.isSubmitting}
-                  >
+                  <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                     Register
                   </Button>
                 </div>

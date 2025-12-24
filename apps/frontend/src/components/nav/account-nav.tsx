@@ -1,24 +1,26 @@
 "use client";
 import { YnsLink } from "@/components/ui/yns-link";
 import { UserIcon } from "lucide-react";
-import { useAuthStore } from "@/store/auth.store";
-import { useEffect } from "react";
+// import { useAuthStore } from "@/store/auth.store";
+import { CustomerProfile } from "@/lib/payload/customer";
+import { useEffect, useState } from "react";
+import { getCustomerFromToken } from "@/lib/payload/customer";
 
-interface AccountNavProps {
-  customer: CurrentCustomer | null;
-}
+export function AccountNav() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-export function AccountNav({ customer }: AccountNavProps) {
-  const { isAuthenticated, setCustomer } = useAuthStore();
+  async function checkAuth() {
+    const { payload: customerProfile, error } = await getCustomerFromToken();
+    const isAuth = !error && !!customerProfile?.id;
+    setIsAuthenticated(isAuth);
+  }
 
   useEffect(() => {
-    if (customer) {
-      setCustomer(customer);
-    }
+    checkAuth();
   }, []);
 
   return (
-    <YnsLink href={isAuthenticated ? "/account" : "/auth/login"}>
+    <YnsLink href={isAuthenticated ? "/account/profile" : "/auth/login"}>
       <UserIcon className="hover:text-neutral-500" />
     </YnsLink>
   );

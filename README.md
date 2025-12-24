@@ -4,7 +4,7 @@ This repository is a Turborepo-powered monorepo containing:
 
 - **Frontend** — Next.js App Router based on [`yournextstore`](https://github.com/yournextstore/yournextstore)
 - **CMS backend** — Payload CMS for product, media, and content management
-- **Shared packages** — Reusable schemas, shared TypeScript utilities, and lint configs
+- **Shared packages** — Reusable schemas, shared data, and lint configs
 
 ---
 
@@ -18,34 +18,21 @@ This repository is a Turborepo-powered monorepo containing:
 ├── packages/
 │ ├── schemas
 │ ├── shared-data
+│ ├── ts-config
 └── turbo.json
 ```
-
-<!-- ---
-
-## 🚀 Applications
-
-### `frontend/` — Next.js Storefront
-
-- App Router + Server Components
-- Fetches catalog, categories, and media from the Payload CMS API
-- Supports SSR/ISR for product pages
-- Uses shared schemas for strong typing between frontend and backend
-
-### `payloadcms/` — Payload CMS Backend
-
-- Manages products, categories, orders, customers, media
-- Authentication, access control, admin UI out-of-the-box
-
---- -->
 
 ## Environment Variables
 
 Frontend (apps/frontend/.env)
 
 ```sh
-  PAYLOAD_SECRET=XXXXXXXXXXXXXX
+  NEXT_PUBLIC_BASE_URL=http://localhost:8080
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=XXXXXXXXXXXXXX
+
+  API_URL=http://localhost:3000
+  IMAGE_DOMAIN=http://localhost:3000
+  PAYLOAD_SECRET=XXXXXXXXXXXXXX
 ```
 
 Payloadcms (apps/payloadcms/.env)
@@ -57,22 +44,25 @@ PAYLOAD_SECRET=XXXXXXXXXXXXXX
 DATABASE_URI=postgres://USER:PASS@HOST:5432/DATABASE
 NEXT_PUBLIC_CLIENT_URL=http://localhost:8080
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+IMAGE_BASE_URL=http://localhost:3000
 # Added by Payload
 
-SMTP_SERVICE=gmail
-SMTP_USER=XXXXXXXXXXXXXX@gmail.com
-SMTP_PASS=XXXXXXXXXXXXXX
+SMTP_SERVICE=smtp.gmail.com
+SMTP_USER=XXXXXXX@gmail.com
+SMTP_PASS=XXXXXXXXXXXXXXXXX
 EMAIL_FROM_NAME=NextStore
-EMAIL_FROM_ADDRESS=XXXXXXXXXXXXXX@gmail.com
+EMAIL_FROM_ADDRESS=XXXXXXX@gmail.com
 
+STRIPE_SECRET_KEY=XXXXXXXXXXXXXX
+STRIPE_PUBLIC_KEY=XXXXXXXXXXXXXX
+
+# For production
 S3_BUCKET=XXXXXXXXXXXXXX
 S3_ENDPOINT=https://<bucket>.s3.<region>.amazonaws.com
 S3_REGION=XXXXXXXXXXXXXX
 S3_ACCESS_KEY_ID=XXXXXXXXXXXXXX
 S3_SECRET_ACCESS_KEY=XXXXXXXXXXXXXX
 
-STRIPE_SECRET_KEY=XXXXXXXXXXXXXX
-STRIPE_PUBLIC_KEY=XXXXXXXXXXXXXX
 ```
 
 ### APP_ENV
@@ -105,17 +95,3 @@ CMS runs at [`http://localhost:8080`](http://localhost:8080)
 Frontend runs at [`http://localhost:3000`](http://localhost:3000)
 
 ---
-
-## 🛠 Production
-
-Build all apps:
-
-```sh
-pnpm run build
-```
-
-Start each app:
-
-```sh
-pnpm start
-```

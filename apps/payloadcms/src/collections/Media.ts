@@ -1,21 +1,17 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from "payload";
 
-import {
-  FixedToolbarFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import { FixedToolbarFeature, InlineToolbarFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
+import path from "path";
+import { fileURLToPath } from "url";
 
-import { anyone } from '../access/anyone'
-import { admins } from '@/access/admin'
+import { anyone } from "../access/anyone";
+import { admins } from "@/access/admin";
 
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 export const Media: CollectionConfig = {
-  slug: 'media',
+  slug: "media",
   folders: true,
   access: {
     create: admins,
@@ -23,26 +19,29 @@ export const Media: CollectionConfig = {
     read: anyone,
     update: admins,
   },
+  admin: {
+    group: "Page Settings",
+  },
   fields: [
     {
-      name: 'alt',
-      type: 'text',
+      name: "alt",
+      type: "text",
       //required: true,
     },
     {
-      name: 'prefix', //this field for integrate with s3 storage plugin
-      type: 'text',
+      name: "prefix", //this field for integrate with s3 storage plugin
+      type: "text",
       admin: {
         readOnly: true,
         hidden: true,
       },
     },
     {
-      name: 'caption',
-      type: 'richText',
+      name: "caption",
+      type: "richText",
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
-          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()];
         },
       }),
     },
@@ -50,17 +49,14 @@ export const Media: CollectionConfig = {
   hooks: {
     afterRead: [
       ({ doc }) => {
-        const baseUrl = process.env.IMAGE_BASE_URL
-        const isNotFullUrl = !/^https?:\/\//i.test(doc?.url)
-        console.log('base url ', baseUrl)
+        const baseUrl = process.env.IMAGE_BASE_URL;
+        const isNotFullUrl = !/^https?:\/\//i.test(doc?.url);
 
         if (baseUrl && isNotFullUrl) {
-          doc.url = `${baseUrl}/${doc.url}`
+          doc.url = `${baseUrl}/${doc.url}`;
         }
 
-        console.log(doc.url)
-
-        return doc
+        return doc;
       },
     ],
   },
@@ -68,7 +64,7 @@ export const Media: CollectionConfig = {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
     // adminThumbnail: 'thumbnail',
     focalPoint: true,
-    staticDir: path.resolve(dirname, '../../public/media'),
+    staticDir: path.resolve(dirname, "../../public/media"),
     // imageSizes: [
     //   {
     //     name: 'thumbnail',
@@ -103,4 +99,4 @@ export const Media: CollectionConfig = {
     //   },
     // ],
   },
-}
+};

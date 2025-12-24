@@ -18,11 +18,7 @@ export default function ProductVariant({
       <p className="text-base font-medium" id="variant-label">
         Variant
       </p>
-      <ul
-        role="list"
-        className="grid grid-cols-4 gap-2"
-        aria-labelledby="variant-label"
-      >
+      <ul role="list" className="grid grid-cols-4 gap-2" aria-labelledby="variant-label">
         {product.variants.map((variant) => {
           const isSelected = selectedVariant.id === variant.id;
           return (
@@ -34,7 +30,7 @@ export default function ProductVariant({
                   href={`/product/${product.slug}?variant=${getVariantName(variant)}`}
                   className={cn(
                     "flex cursor-pointer items-center justify-center gap-2 rounded-md border p-2 transition-colors hover:bg-neutral-100",
-                    isSelected && "border-black bg-neutral-50 font-medium"
+                    isSelected && "border-black bg-neutral-50 font-medium",
                   )}
                   aria-selected={isSelected}
                 >

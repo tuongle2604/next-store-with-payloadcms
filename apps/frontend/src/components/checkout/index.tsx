@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { OrderSummary } from "./order-summary";
-import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/cart.store";
 import { EmptyCartCheckout } from "./empty-cart-checkout";
 import CheckoutForm from "./checkout-form";
@@ -12,26 +11,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { CheckoutFormData } from "@repo/schemas/form-schemas";
 import { checkout } from "@/lib/payload/checkout";
 import { toast } from "sonner";
+import { useSessionStorage } from "usehooks-ts";
+import type { CustomerProfile } from "@/lib/payload/customer";
 
-interface CheckoutProps {
-  onCompleteOrder: () => void;
-}
+export function Checkout({ customerProfile }: { customerProfile: CustomerProfile }) {
+  const [, setOrder] = useSessionStorage("order", "");
 
-const defaultValues: CheckoutFormData = {
-  fullName: "",
-  email: "",
-  phone: "",
-  shippingAddress: "",
-  shippingCity: "",
-  shippingProvince: "",
-  shippingPostalCode: "",
-  shippingCountry: "vi",
-};
-
-export function Checkout() {
-  const methods = useForm<CheckoutFormData>({
+  const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormSchema),
-    defaultValues,
+    defaultValues: {
+      fullName: customerProfile.fullName || "",
+      email: customerProfile.email || "",
+      phone: customerProfile.phone || "",
+      shippingAddress: "",
+      shippingCity: "",
+      shippingProvince: "",
+      shippingPostalCode: "",
+      shippingCountry: "vi",
+    },
   });
 
   const { cartItems, setCartItems } = useCartStore();
@@ -41,7 +38,6 @@ export function Checkout() {
 
   const isFormValid = contactValid && shippingValid && paymentValid;
   const isCartEmpty = cartItems.length === 0;
-  const router = useRouter();
 
   async function handleCompleteOrder(formData: CheckoutFormData) {
     const payload = {
@@ -53,12 +49,12 @@ export function Checkout() {
 
     if (error || !data) {
       console.log("Checkout error:", error?.message);
-      console.log("Checkout error:", error);
 
       toast.error(error?.message || "An error occurred during checkout");
       return;
     }
 
+    setOrder(JSON.stringify({ ...payload, orderId: data.orderId }));
     window.location.href = data.url;
   }
 
@@ -75,16 +71,14 @@ export function Checkout() {
     <div className="min-h-screen py-4 sm:py-8">
       <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Complete Your Order
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">Complete Your Order</h1>
           <p className="mt-2 text-gray-600">
             Enter your details below to finalize your purchase. <br />
             Your information is secure and encrypted.
           </p>
         </div>
 
-        <FormProvider {...methods}>
+        <FormProvider {...form}>
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Left Column - Forms */}
             <div className="space-y-6">

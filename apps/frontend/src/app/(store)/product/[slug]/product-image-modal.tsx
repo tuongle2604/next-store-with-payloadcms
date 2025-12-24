@@ -16,16 +16,9 @@ export function ProductImageModal({ images }: ImageModalProps) {
   const searchParams = useSearchParams();
   const routerNoRender = useRouterNoRender();
 
-  const searchParamsImageIndex = Number.parseInt(
-    searchParams.get("image") ?? "",
-    10
-  );
-  const initialImageIndex = Number.isNaN(searchParamsImageIndex)
-    ? null
-    : searchParamsImageIndex;
-  const [imageIndex, setImageIndex] = useState<null | number>(
-    initialImageIndex
-  );
+  const searchParamsImageIndex = Number.parseInt(searchParams.get("image") ?? "", 10);
+  const initialImageIndex = Number.isNaN(searchParamsImageIndex) ? null : searchParamsImageIndex;
+  const [imageIndex, setImageIndex] = useState<null | number>(initialImageIndex);
 
   const changeImageIndex = (index: number | null) => {
     if (imageIndex === index) {
@@ -84,36 +77,22 @@ export function ProductImageModal({ images }: ImageModalProps) {
     }
   };
 
-  const ImageElement = ({
-    src,
-    className,
-  }: {
-    src: string;
-    className?: string;
-  }) => {
-    return (
-      <Image
-        src={src}
-        alt=""
-        fill
-        className={cn(className, "object-contain")}
-        sizes="100vh"
-      />
-    );
+  const ImageElement = ({ src, className }: { src: string; className?: string }) => {
+    return <Image src={src} alt="" fill className={cn(className, "object-contain")} sizes="100vh" />;
   };
 
   return (
-    <div className="fixed inset-0 bg-neutral-100 z-50 flex flex-col animate-in fade-in">
+    <div className="animate-in fade-in fixed inset-0 z-50 flex flex-col bg-neutral-100">
       <button
         type="button"
         onClick={() => onDismiss()}
-        className="ml-auto text-neutral-500 hover:text-neutral-700 p-2"
+        className="ml-auto p-2 text-neutral-500 hover:text-neutral-700"
       >
-        <XIcon className="w-6 h-6" />
+        <XIcon className="h-6 w-6" />
       </button>
 
-      <div className="grow flex items-center justify-center overflow-hidden">
-        <div key={src} className="relative w-full h-full animate-in fade-in">
+      <div className="flex grow items-center justify-center overflow-hidden">
+        <div key={src} className="animate-in fade-in relative h-full w-full">
           <ImageElement src={src} />
         </div>
 
@@ -122,18 +101,18 @@ export function ProductImageModal({ images }: ImageModalProps) {
           onClick={() => {
             handlePrevious();
           }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-2 hover:bg-gray-100 transition-colors"
+          className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-white/90 p-2 transition-colors hover:bg-gray-100"
         >
-          <ChevronLeftIcon className="w-6 h-6" />
+          <ChevronLeftIcon className="h-6 w-6" />
         </button>
         <button
           type="button"
           onClick={() => {
             handleNext();
           }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-2 hover:bg-gray-100 transition-colors"
+          className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-white/90 p-2 transition-colors hover:bg-gray-100"
         >
-          <ChevronRightIcon className="w-6 h-6" />
+          <ChevronRightIcon className="h-6 w-6" />
         </button>
       </div>
 
@@ -142,8 +121,8 @@ export function ProductImageModal({ images }: ImageModalProps) {
           <Fragment key={idx}>
             <YnsLink
               className={cn(
-                "border-transparent border rounded-lg overflow-hidden",
-                src === image && "border-black"
+                "overflow-hidden rounded-lg border border-transparent",
+                src === image && "border-black",
               )}
               onClick={(e) => {
                 e.preventDefault();
@@ -154,17 +133,10 @@ export function ProductImageModal({ images }: ImageModalProps) {
               href={`?image=${idx}`}
               scroll={false}
             >
-              <Image
-                src={image}
-                alt={""}
-                width={80}
-                height={80}
-                className="object-cover"
-                sizes="80px"
-              />
+              <Image src={image} alt={""} width={80} height={80} className="object-cover" sizes="80px" />
             </YnsLink>
             {/* preload images */}
-            <div className="relative pointer-events-none opacity-0">
+            <div className="pointer-events-none relative opacity-0">
               <ImageElement src={src} />
             </div>
           </Fragment>

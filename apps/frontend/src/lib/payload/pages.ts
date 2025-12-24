@@ -1,16 +1,19 @@
 "use server";
 import { Page } from "@repo/cms/types";
-import api from "../utils/api";
+// import api from "../utils/api";
+import payloadSDK from "../payloadSDK";
 
 async function getHomePage() {
-  const { data, error } = await api.get<Page>("/api/pages/detail-by-slug/home");
+  const { data } = await payloadSDK.pages.find<PaginatedResult<Page>>({
+    where: {
+      slug: {
+        equals: "home",
+      },
+    },
+    depth: 2,
+  });
 
-  if (error) {
-    console.error("Error fetching home page:", error);
-    return null;
-  }
-
-  return data as Page;
+  return data?.docs[0];
 }
 
 export { getHomePage };

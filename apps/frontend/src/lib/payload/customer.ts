@@ -1,40 +1,48 @@
 "use server";
 import { cookies } from "next/headers";
 import { decodeJWT } from "@/lib/auth";
+import { Customer } from "@repo/cms/types";
+import payloadSDK from "../payloadSDK";
+import { redirect } from "next/navigation";
 
-// import crypto from "crypto";
-// import { jwtVerify } from "jose";
+interface LoginPayload {
+  email: string;
+  password: string;
+}
 
-// const secret = process.env.PAYLOAD_SECRET || "";
-
-// async function decodeJWT(token: string) {
-//   try {
-//     const newSecret = crypto
-//       .createHash("sha256")
-//       .update(secret)
-//       .digest("hex")
-//       .slice(0, 32);
-
-//     const secretKey = new TextEncoder().encode(newSecret);
-//     const { payload: decodedPayload } = await jwtVerify(token, secretKey);
-//     return decodedPayload;
-//   } catch (err) {
-//     console.error("JWT verification failed", err);
-//     return null;
-//   }
-// }
+export type CustomerProfile = Pick<
+  Customer,
+  "id" | "email" | "fullName" | "firstName" | "lastName" | "phone"
+>;
 
 const getCustomerFromToken = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get("payload-token")?.value || "";
-  // console.log(token);
 
-  if (!token) return null;
+  if (!token) {
+    return { payload: undefined, error: { message: "No token found", code: "NO_TOKEN" } };
+  }
 
-  const data: unknown = await decodeJWT(token);
-  // console.log(data);
-
-  return data || null;
+  return decodeJWT<CustomerProfile>(token);
 };
 
-export { getCustomerFromToken };
+const getCustomer = async (customerId: number) => {
+  // return payloadSDK.customers.getMe<Customer>();
+  return payloadSDK.customers.findByID<Customer>({
+    id: customerId,
+  });
+};
+
+const updateCustomer = async (customerId: number, profileData: Partial<Customer>) => {
+  if (!customerId) {
+    // throw new Error("Customer ID is required to update profile.");
+    return { data: null, error: new Error("Customer ID is required to update profile.") };
+  }
+
+  return payloadSDK.customers.updateByID<Omit<Customer, "orders">>({
+    id: customerId,
+    data: profileData,
+  });
+};
+
+export { getCustomerFromToken, getCustomer, updateCustomer };

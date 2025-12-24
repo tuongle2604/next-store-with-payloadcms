@@ -39,22 +39,17 @@ export const AddToCartButton = ({
       id="button-add-to-cart"
       // size="lg"
       type="submit"
-      className={cn("rounded-full text-lg relative", className)}
+      className={cn("relative rounded-full text-lg", className)}
       onClick={handleAddToCart}
       aria-disabled={isDisabled}
     >
-      <span
-        className={cn(
-          "transition-opacity ease-in",
-          pending ? "opacity-0" : "opacity-100"
-        )}
-      >
+      <span className={cn("transition-opacity ease-in", pending ? "opacity-0" : "opacity-100")}>
         {disabled ? t("disabled") : t("actionButton")}
       </span>
       <span
         className={cn(
-          "ease-out transition-opacity pointer-events-none absolute z-10",
-          pending ? "opacity-100" : "opacity-0"
+          "pointer-events-none absolute z-10 transition-opacity ease-out",
+          pending ? "opacity-100" : "opacity-0",
         )}
       >
         <Loader2Icon className="h-4 w-4 animate-spin" />

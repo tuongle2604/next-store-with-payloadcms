@@ -7,26 +7,23 @@ import { Bell, LogOut } from "lucide-react";
 import { logout } from "@/lib/payload/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useAuthStore } from "@/store/auth.store";
+// import { useAuthStore } from "@/store/auth.store";
+import { useCustomer } from "@/contexts/CustomerContext";
 
-interface AccountHeaderProps {
-  customer: CurrentCustomer | null;
-}
-
-export default function AccountHeader({ customer }: AccountHeaderProps) {
+export default function AccountHeader() {
   const router = useRouter();
-  const logoutCustomer = useAuthStore((state) => state.logoutCustomer);
+  const { customer, setCustomer } = useCustomer();
 
   async function handleLogout() {
     await logout();
-    toast.success("Logged out successfully");
     router.push("/");
-    logoutCustomer();
+    setCustomer(null);
+    toast.success("Logged out successfully");
   }
 
   return (
     <div className="mb-8">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12">
             <AvatarImage src="/placeholder.svg?height=48&width=48" alt="User" />
@@ -34,9 +31,7 @@ export default function AccountHeader({ customer }: AccountHeaderProps) {
           </Avatar>
           <div>
             <h1 className="text-2xl font-bold">{customer?.fullName}</h1>
-            <p className="text-sm text-muted-foreground">
-              Manage your account preferences
-            </p>
+            <p className="text-muted-foreground text-sm">Manage your account preferences</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -44,12 +39,7 @@ export default function AccountHeader({ customer }: AccountHeaderProps) {
             <Bell className="h-3 w-3" />
             Pro Plan
           </Badge>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleLogout}
-            className="gap-2"
-          >
+          <Button variant="outline" size="sm" onClick={handleLogout} className="gap-2">
             <LogOut className="h-4 w-4" />
             Logout
           </Button>

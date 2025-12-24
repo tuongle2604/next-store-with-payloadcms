@@ -9,10 +9,6 @@ const __dirname = import.meta.dirname
 const nextConfig = {
   output: 'standalone',
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  // env: {
-  //   IMAGE_BASE_URL: process.env.IMAGE_BASE_URL,
-  //   APP_ENV: process.env.APP_ENV,
-  // },
   typescript: {
     ignoreBuildErrors: true,
   },

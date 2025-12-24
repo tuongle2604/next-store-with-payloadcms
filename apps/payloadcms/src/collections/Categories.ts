@@ -1,12 +1,11 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from "payload";
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
-import { admins } from '@/access/admin'
-import { slugField } from '@/fields/slug'
+import { anyone } from "../access/anyone";
+import { admins } from "@/access/admin";
+import { slugField } from "@/fields/slug";
 
 export const Categories: CollectionConfig = {
-  slug: 'categories',
+  slug: "categories",
   access: {
     create: admins,
     delete: admins,
@@ -14,14 +13,15 @@ export const Categories: CollectionConfig = {
     update: admins,
   },
   admin: {
-    useAsTitle: 'title',
+    useAsTitle: "title",
+    group: "Products",
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       required: true,
     },
     ...slugField(),
   ],
-}
+};

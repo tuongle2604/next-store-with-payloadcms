@@ -1,10 +1,9 @@
 import { getTranslations } from "@/i18n/server";
 import { deslugify } from "@/lib/utils";
 import { ProductList } from "@/components/products/product-list";
-import * as Commerce from "commerce-kit";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next/types";
-import { getProducts } from "@/lib/payload";
+import { getProducts, getProductsByCategory } from "@/lib/payload";
 // export const generateMetadata = async (props: {
 // 	params: Promise<{ slug: string }>;
 // }): Promise<Metadata> => {
@@ -26,18 +25,12 @@ import { getProducts } from "@/lib/payload";
 // 	};
 // };
 
-export default async function CategoryPage(props: {
-  params: Promise<{ slug: string }>;
-}) {
+export const revalidate = 3600;
+
+export default async function CategoryPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const products = await getProducts(
-    { limit: 30 },
-    {
-      "category.slug": {
-        equals: params.slug,
-      },
-    },
-  );
+  const products = await getProductsByCategory(params.slug, { limit: 20 });
+  console.log("rerender CategoryPage");
 
   if (products.length === 0) {
     return notFound();

@@ -21,9 +21,7 @@ export const NavMobileMenu = ({ children }: { children: ReactNode }) => {
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle className="text-center">Menu</DrawerTitle>
-          <DrawerDescription className="sr-only">
-            Navigation menu
-          </DrawerDescription>
+          <DrawerDescription className="sr-only">Navigation menu</DrawerDescription>
         </DrawerHeader>
         <div
           onClick={(e) => {

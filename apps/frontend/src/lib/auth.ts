@@ -9,21 +9,19 @@ if (!process.env.PAYLOAD_SECRET) {
 
 const secret = process.env.PAYLOAD_SECRET || "";
 
-const newSecret = crypto
-  .createHash("sha256")
-  .update(secret)
-  .digest("hex")
-  .slice(0, 32);
+const newSecret = crypto.createHash("sha256").update(secret).digest("hex").slice(0, 32);
 
 const secretKey = new TextEncoder().encode(newSecret);
 
-async function decodeJWT(token: string) {
+async function decodeJWT<T>(token: string): Promise<{ payload?: T; error?: any }> {
   try {
-    const { payload: decodedPayload } = await jwtVerify(token, secretKey);
-    return decodedPayload;
+    const { payload } = await jwtVerify<T>(token, secretKey);
+
+    return { payload, error: undefined };
   } catch (err) {
-    console.error("JWT verification failed", err);
-    return null;
+    console.log("JWT verification failed", err);
+
+    return { payload: undefined, error: err };
   }
 }
 

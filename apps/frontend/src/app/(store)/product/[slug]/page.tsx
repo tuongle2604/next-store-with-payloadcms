@@ -8,17 +8,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { getLocale, getTranslations } from "@/i18n/server";
+import { getTranslations } from "@/i18n/server";
 import { getProductDetail } from "@/lib/payload/product";
 import { cn, deslugify, formatMoney, formatProductName } from "@/lib/utils";
-// import type { TrieveProductMetadata } from "@/scripts/upload-trieve";
 import { AddToCartButton } from "@/components/ui/add-to-cart-button";
 import { JsonLd, mappedProductToJsonLd } from "@/components/ui/json-ld";
-import { Markdown } from "@/components/ui/markdown";
 import { MainProductImage } from "@/components/products/main-product-image";
 import { StickyBottom } from "@/components/ui/sticky-bottom";
 import { YnsLink } from "@/components/ui/yns-link";
-// import * as Commerce from "commerce-kit";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next/types";
@@ -63,11 +60,13 @@ import { CartItem } from "@/store/cart.store";
 //     alternates: { canonical },
 //   } satisfies Metadata;
 // };
+export const revalidate = 3600;
 
 export default async function SingleProductPage(props: {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ variant?: string; image?: string }>;
 }) {
+  console.log("rerender product page");
   const params = await props.params;
   const searchParams = await props.searchParams;
   const product = await getProductDetail(params.slug);
@@ -77,17 +76,13 @@ export default async function SingleProductPage(props: {
   }
 
   const t = await getTranslations("/product.page");
-  const locale = await getLocale();
   const { variant } = searchParams;
   const category = product.category as Category;
   let selectedVariant = product.variants?.[0];
-  const images = (product.variants?.map((v) => v.images).flat() ||
-    []) as Media[];
+  const images = (product.variants?.map((v) => v.images).flat() || []) as Media[];
 
   if (searchParams.variant) {
-    selectedVariant = product.variants?.find(
-      (v) => getVariantName(v) === variant,
-    );
+    selectedVariant = product.variants?.find((v) => getVariantName(v) === variant);
   }
 
   if (!selectedVariant) {
@@ -110,10 +105,7 @@ export default async function SingleProductPage(props: {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              asChild
-              className="inline-flex min-h-12 min-w-12 items-center justify-center"
-            >
+            <BreadcrumbLink asChild className="inline-flex min-h-12 min-w-12 items-center justify-center">
               <YnsLink href="/products">{t("allProducts")}</YnsLink>
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -121,13 +113,8 @@ export default async function SingleProductPage(props: {
             <>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink
-                  className="inline-flex min-h-12 min-w-12 items-center justify-center"
-                  asChild
-                >
-                  <YnsLink href={`/category/${category.slug}`}>
-                    {category.title}
-                  </YnsLink>
+                <BreadcrumbLink className="inline-flex min-h-12 min-w-12 items-center justify-center" asChild>
+                  <YnsLink href={`/category/${category.slug}`}>{category.title}</YnsLink>
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </>
@@ -140,9 +127,7 @@ export default async function SingleProductPage(props: {
             <>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>
-                  {getVariantName(selectedVariant)}
-                </BreadcrumbPage>
+                <BreadcrumbPage>{getVariantName(selectedVariant)}</BreadcrumbPage>
               </BreadcrumbItem>
             </>
           )}
@@ -152,22 +137,17 @@ export default async function SingleProductPage(props: {
       {/* <StickyBottom cartItem={cartItem} locale={locale}> */}
       <div className="mt-4 grid gap-4 lg:grid-cols-12">
         <div className="lg:col-span-5 lg:col-start-8">
-          <h1 className="text-foreground text-3xl leading-none font-bold tracking-tight">
-            {product.name}
-          </h1>
+          <h1 className="text-foreground text-3xl leading-none font-bold tracking-tight">{product.name}</h1>
           {selectedVariant && (
             <p className="text-foreground/70 mt-2 text-2xl leading-none font-medium tracking-tight">
               {formatMoney({
                 amount: selectedVariant.price,
                 currency: "USD",
-                locale,
               })}
             </p>
           )}
           <div className="mt-2">
-            {selectedVariant?.stock && selectedVariant.stock <= 0 && (
-              <div>Out of stock</div>
-            )}
+            {selectedVariant?.stock && selectedVariant.stock <= 0 && <div>Out of stock</div>}
           </div>
         </div>
 
@@ -204,13 +184,6 @@ export default async function SingleProductPage(props: {
         </div>
 
         <div className="grid gap-8 lg:col-span-5">
-          <section>
-            <h2 className="sr-only">{t("descriptionTitle")}</h2>
-            <div className="prose text-secondary-foreground">
-              <Markdown source={product.description || ""} />
-            </div>
-          </section>
-
           <ProductVariant product={product} selectedVariant={selectedVariant} />
 
           <AddToCartButton cartItem={cartItem} disabled={false} />
@@ -219,10 +192,7 @@ export default async function SingleProductPage(props: {
       {/* </StickyBottom> */}
 
       <Suspense>
-        <ProductRelated
-          tagIds={product.tags?.map((o) => (o as Tag).id)}
-          productId={product.id}
-        />
+        <ProductRelated tagIds={product.tags?.map((o) => (o as Tag).id)} productId={product.id} />
         {/* <SimilarProducts id={product.id} /> */}
       </Suspense>
 

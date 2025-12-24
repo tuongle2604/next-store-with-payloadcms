@@ -7,13 +7,7 @@ import { ShoppingCart } from "lucide-react";
 import type { CheckoutFormData } from "@repo/schemas/form-schemas";
 // import { FormProvider, useForm } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { countryList } from "@repo/shared-data/countries";
 
 export default function CheckoutForm() {
@@ -22,30 +16,12 @@ export default function CheckoutForm() {
     formState: { errors },
   } = useFormContext<CheckoutFormData>();
 
-  const onSubmit = async (data: CheckoutFormData) => {
-    // try {
-    //   // Simulate API call
-    //   await new Promise((resolve) => setTimeout(resolve, 2000));
-    //   toast({
-    //     title: "Order submitted successfully!",
-    //     description: "You will receive a confirmation email shortly.",
-    //   });
-    //   console.log("Form submitted:", data);
-    // } catch (error) {
-    //   toast({
-    //     title: "Error submitting order",
-    //     description: "Please try again later.",
-    //     variant: "destructive",
-    //   });
-    // }
-  };
-
   return (
     <form className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <ShoppingCart className="w-5 h-5" />
+            <ShoppingCart className="h-5 w-5" />
             Contact Information & Shipping Address
           </CardTitle>
         </CardHeader>
@@ -61,11 +37,7 @@ export default function CheckoutForm() {
                 placeholder="John Doe"
                 className={errors.fullName ? "border-red-500" : ""}
               />
-              {errors.fullName && (
-                <p className="text-sm text-red-500">
-                  {errors.fullName.message}
-                </p>
-              )}
+              {errors.fullName && <p className="text-sm text-red-500">{errors.fullName.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -77,9 +49,7 @@ export default function CheckoutForm() {
                 placeholder="john.doe@example.com"
                 className={errors.email ? "border-red-500" : ""}
               />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -91,9 +61,7 @@ export default function CheckoutForm() {
                 placeholder="+1 (555) 123-4567"
                 className={errors.phone ? "border-red-500" : ""}
               />
-              {errors.phone && (
-                <p className="text-sm text-red-500">{errors.phone.message}</p>
-              )}
+              {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
             </div>
           </div>
 
@@ -113,9 +81,7 @@ export default function CheckoutForm() {
                 className={errors.shippingAddress ? "border-red-500" : ""}
               />
               {errors.shippingAddress && (
-                <p className="text-sm text-red-500">
-                  {errors.shippingAddress.message}
-                </p>
+                <p className="text-sm text-red-500">{errors.shippingAddress.message}</p>
               )}
             </div>
 
@@ -129,11 +95,7 @@ export default function CheckoutForm() {
                   placeholder="New York"
                   className={errors.shippingCity ? "border-red-500" : ""}
                 />
-                {errors.shippingCity && (
-                  <p className="text-sm text-red-500">
-                    {errors.shippingCity.message}
-                  </p>
-                )}
+                {errors.shippingCity && <p className="text-sm text-red-500">{errors.shippingCity.message}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="shippingProvince">State/Province *</Label>
@@ -145,9 +107,7 @@ export default function CheckoutForm() {
                   className={errors.shippingProvince ? "border-red-500" : ""}
                 />
                 {errors.shippingProvince && (
-                  <p className="text-sm text-red-500">
-                    {errors.shippingProvince.message}
-                  </p>
+                  <p className="text-sm text-red-500">{errors.shippingProvince.message}</p>
                 )}
               </div>
             </div>
@@ -163,17 +123,13 @@ export default function CheckoutForm() {
                   className={errors.shippingPostalCode ? "border-red-500" : ""}
                 />
                 {errors.shippingPostalCode && (
-                  <p className="text-sm text-red-500">
-                    {errors.shippingPostalCode.message}
-                  </p>
+                  <p className="text-sm text-red-500">{errors.shippingPostalCode.message}</p>
                 )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="shippingCountry">Country *</Label>
                 <Select {...register("shippingCountry")} defaultValue="vi">
-                  <SelectTrigger
-                    className={errors.shippingCountry ? "border-red-500" : ""}
-                  >
+                  <SelectTrigger className={errors.shippingCountry ? "border-red-500" : ""}>
                     <SelectValue placeholder="Select a country" />
                   </SelectTrigger>
                   <SelectContent>
@@ -185,9 +141,7 @@ export default function CheckoutForm() {
                   </SelectContent>
                 </Select>
                 {errors.shippingCountry && (
-                  <p className="text-sm text-red-500">
-                    {errors.shippingCountry.message}
-                  </p>
+                  <p className="text-sm text-red-500">{errors.shippingCountry.message}</p>
                 )}
               </div>
             </div>

@@ -1,14 +1,7 @@
 "use client";
 // import { getCartFromCookiesAction } from "@/actions/cart-actions";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-// import { getLocale, getTranslations } from "@/i18n/server";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { formatMoney } from "@/lib/utils";
-// import { calculateCartTotalNetWithoutShipping } from "commerce-kit";
 import { calculateCartTotal } from "@/lib/utils";
 import { ShoppingBagIcon } from "lucide-react";
 // import { Suspense } from "react";
@@ -30,7 +23,7 @@ import { useCartStore } from "@/store/cart.store";
 // };
 
 export const CartSummaryNav = () => {
-  const { cartItems, toggleCart } = useCartStore();
+  const { cartItems } = useCartStore();
   // const cart = await getCartFromCookiesAction();
   // if (!cart) {
   // 	return <CartFallback />;
@@ -40,21 +33,16 @@ export const CartSummaryNav = () => {
   // }
 
   const total = calculateCartTotal(cartItems);
-  const totalItems = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
-  // const t = await getTranslations("Global.nav.cartSummary");
-  // const locale = await getLocale();
+  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <TooltipProvider>
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>
-          <div onClick={toggleCart}>
+          <div>
             <CartLink>
               <ShoppingBagIcon />
-              <span className="absolute bottom-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs text-center translate-x-1/2 translate-y-1/2 bg-white border-2 rounded-full">
+              <span className="absolute right-0 bottom-0 inline-flex h-5 w-5 translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border-2 bg-white text-center text-xs">
                 <span className="sr-only">{"Items in cart"}: </span>
                 {totalItems}
               </span>
@@ -63,20 +51,18 @@ export const CartSummaryNav = () => {
                 {formatMoney({
                   amount: total,
                   currency: "USD",
-                  locale: "en-US",
                 })}
               </span>
             </CartLink>
           </div>
         </TooltipTrigger>
         <TooltipContent side="left" sideOffset={25}>
-          <p>{"20 Items in cart"}</p>
+          <p>{`${totalItems} Items in cart`}</p>
           <p>
             {"Total"}:{" "}
             {formatMoney({
               amount: total,
               currency: "USD",
-              locale: "en-US",
             })}
           </p>
         </TooltipContent>

@@ -1,5 +1,5 @@
-import type { Access } from 'payload'
+import type { Access } from "payload";
 
-import { checkRole } from './checkRole'
+import { checkRole } from "./checkRole";
 
-export const guest: Access = ({ req: { user } }) => checkRole(['guest'], user)
+export const guest: Access = ({ req: { user } }) => checkRole(["guest", "admin"], user);

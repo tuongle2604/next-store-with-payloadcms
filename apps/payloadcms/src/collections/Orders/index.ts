@@ -1,43 +1,42 @@
-import { type CollectionConfig } from 'payload'
+import { type CollectionConfig } from "payload";
 
-import { countryList } from '@repo/shared-data/countries'
-import { generateID } from './hooks/generateID'
-import { authenticated } from '@/access/authenticated'
-import { admins } from '@/access/admin'
+import { countryList } from "@repo/shared-data/countries";
+import { generateID } from "./hooks/generateID";
+import { admins } from "@/access/admin";
+import { readOrderResources } from "@/access/readOrderResources";
 
 export const Orders: CollectionConfig = {
-  slug: 'orders',
+  slug: "orders",
   access: {
-    admin: authenticated,
     create: admins,
     delete: admins,
-    read: authenticated,
+    read: readOrderResources, // Allow anyone to read orders
     update: admins,
   },
   admin: {
-    useAsTitle: 'id',
-    group: 'Orders',
+    useAsTitle: "id",
+    group: "Clients",
     defaultColumns: [
-      'id',
-      'customer',
-      'products',
-      'orderDetails.total',
-      'orderDetails.status',
-      'orderDetails.orderNote',
-      'orderDetails.orderDate',
+      "id",
+      "customer",
+      "products",
+      "orderDetails.total",
+      "orderDetails.status",
+      "orderDetails.orderNote",
+      "orderDetails.orderDate",
     ],
   },
   labels: {
-    singular: 'Order',
-    plural: 'Orders',
+    singular: "Order",
+    plural: "Orders",
   },
   hooks: {
     beforeValidate: [generateID],
   },
   fields: [
     {
-      name: 'id',
-      type: 'text',
+      name: "id",
+      type: "text",
       admin: {
         hidden: true,
       },
@@ -45,138 +44,126 @@ export const Orders: CollectionConfig = {
       unique: true,
     },
     {
-      type: 'tabs',
+      type: "tabs",
       tabs: [
         {
-          label: 'General',
+          label: "General",
           fields: [
             {
-              type: 'row',
+              type: "row",
               fields: [
                 {
-                  name: 'customer',
-                  type: 'relationship',
-                  relationTo: 'customers',
-                  label: 'Customer',
+                  name: "customer",
+                  type: "relationship",
+                  relationTo: "customers",
+                  label: "Customer",
                   admin: {
                     readOnly: true,
                   },
                 },
                 {
-                  name: 'date',
-                  label: 'Order Date',
-                  type: 'date',
+                  name: "date",
+                  label: "Order Date",
+                  type: "date",
                   admin: {
                     readOnly: true,
                     date: {
-                      pickerAppearance: 'dayAndTime',
+                      pickerAppearance: "dayAndTime",
                     },
                   },
                 },
               ],
             },
             {
-              name: 'products',
-              type: 'array',
-              label: 'Products',
+              name: "products",
+              type: "array",
+              label: "Products",
               admin: {
                 initCollapsed: true,
                 components: {
-                  RowLabel: '@/components/RowLabels/OrderProductsRowLabel#OrderProductsRowLabel',
+                  RowLabel: "@/components/RowLabels/OrderProductsRowLabel#OrderProductsRowLabel",
                 },
               },
               fields: [
                 {
-                  name: 'isFromAPI',
-                  type: 'checkbox',
+                  name: "isFromAPI",
+                  type: "checkbox",
                   admin: { hidden: true },
                   required: true,
                   defaultValue: false,
                 },
                 {
-                  type: 'row',
+                  type: "row",
                   fields: [
                     {
-                      name: 'product',
-                      type: 'relationship',
-                      relationTo: 'products',
+                      name: "product",
+                      type: "relationship",
+                      relationTo: "products",
                       admin: {
-                        width: '50%',
+                        width: "50%",
                         readOnly: true,
                       },
                     },
                     {
-                      name: 'productName',
-                      type: 'text',
+                      name: "productName",
+                      type: "text",
                       admin: {
                         readOnly: true,
                         hidden: true,
                         components: {
-                          Field:
-                            '@/collections/Orders/components/ProductNameField#ProductNameField',
+                          Field: "@/collections/Orders/components/ProductNameField#ProductNameField",
                         },
                       },
                     },
                     {
-                      name: 'variant',
-                      type: 'text',
+                      name: "variant",
+                      type: "text",
                       admin: {
-                        width: '50%',
+                        width: "50%",
                         readOnly: true,
                         components: {
-                          Field:
-                            '@/collections/Orders/components/ProductVariantSelect#ProductVariantSelect',
+                          Field: "@/collections/Orders/components/ProductVariantSelect#ProductVariantSelect",
                         },
                       },
                     },
                   ],
                 },
                 {
-                  type: 'row',
+                  type: "row",
                   fields: [
                     {
-                      name: 'price',
-                      type: 'number',
-                      label: 'Price per unit',
+                      name: "price",
+                      type: "number",
+                      label: "Price per unit",
                       admin: {
                         readOnly: true,
                         components: {
                           Field:
-                            '@/collections/Orders/components/ProductUnitPriceField#ProductUnitPriceField',
+                            "@/collections/Orders/components/ProductUnitPriceField#ProductUnitPriceField",
                         },
-                        width: '33.33%',
+                        width: "33.33%",
                       },
                     },
                     {
-                      name: 'quantity',
-                      type: 'number',
-                      label: 'Quantity',
+                      name: "quantity",
+                      type: "number",
+                      label: "Quantity",
                       defaultValue: 1,
                       admin: {
-                        width: '33.33%',
+                        width: "33.33%",
                         readOnly: true,
                       },
                       required: true,
                     },
-                    // {
-                    //   name: 'autoprice',
-                    //   type: 'checkbox',
-                    //   label: 'Auto Price',
-                    //   defaultValue: false,
-                    //   admin: {
-                    //     readOnly: true,
-                    //     hidden: true,
-                    //   },
-                    // },
                     {
-                      name: 'priceTotal',
-                      type: 'number',
-                      label: 'Price Total',
+                      name: "priceTotal",
+                      type: "number",
+                      label: "Price Total",
                       admin: {
-                        width: '33.33%',
+                        width: "33.33%",
                         components: {
                           Field:
-                            '@/collections/Orders/components/ProductTotalPriceField#ProductTotalPriceField',
+                            "@/collections/Orders/components/ProductTotalPriceField#ProductTotalPriceField",
                         },
                       },
                       required: true,
@@ -188,86 +175,86 @@ export const Orders: CollectionConfig = {
           ],
         },
         {
-          name: 'shipping',
-          label: 'Shipping',
+          name: "shipping",
+          label: "Shipping",
           fields: [
             {
-              name: 'name',
-              type: 'text',
-              label: 'Name',
+              name: "name",
+              type: "text",
+              label: "Name",
               required: true,
             },
             {
-              name: 'address',
-              type: 'text',
-              label: 'Address',
+              name: "address",
+              type: "text",
+              label: "Address",
               required: true,
             },
             {
-              type: 'row',
+              type: "row",
               fields: [
                 {
-                  name: 'city',
-                  type: 'text',
-                  label: 'City',
+                  name: "city",
+                  type: "text",
+                  label: "City",
                   admin: {
-                    width: '50%',
+                    width: "50%",
                   },
                   required: true,
                 },
                 {
-                  name: 'country',
-                  type: 'select',
-                  label: 'Country',
+                  name: "country",
+                  type: "select",
+                  label: "Country",
                   options: [...countryList],
                   admin: {
-                    width: '50%',
+                    width: "50%",
                   },
                   required: true,
                 },
               ],
             },
             {
-              type: 'row',
+              type: "row",
               fields: [
                 {
-                  name: 'province',
-                  type: 'text',
-                  label: 'Province',
+                  name: "province",
+                  type: "text",
+                  label: "Province",
                   admin: {
-                    width: '50%',
+                    width: "50%",
                   },
                   required: true,
                 },
                 {
-                  name: 'postalCode',
-                  type: 'text',
-                  label: 'Postal Code',
+                  name: "postalCode",
+                  type: "text",
+                  label: "Postal Code",
                   admin: {
-                    width: '50%',
+                    width: "50%",
                   },
                   required: true,
                 },
               ],
             },
             {
-              type: 'row',
+              type: "row",
               fields: [
                 {
-                  name: 'email',
-                  type: 'text',
-                  label: 'Email',
+                  name: "email",
+                  type: "text",
+                  label: "Email",
                   admin: {
-                    width: '50%',
+                    width: "50%",
                   },
                   required: true,
                 },
                 {
-                  name: 'phone',
-                  type: 'text',
-                  label: 'Phone number',
+                  name: "phone",
+                  type: "text",
+                  label: "Phone number",
                   admin: {
-                    width: '50%',
+                    width: "50%",
                   },
                   required: true,
                 },
@@ -278,24 +265,23 @@ export const Orders: CollectionConfig = {
       ],
     },
     {
-      name: 'orderDetails',
-      label: 'Order Details',
-      type: 'group',
+      name: "orderDetails",
+      label: "Order Details",
+      type: "group",
       admin: {
-        position: 'sidebar',
+        position: "sidebar",
       },
       fields: [
         {
-          type: 'row',
+          type: "row",
           fields: [
             {
-              name: 'total',
-              type: 'number',
-              label: 'Total',
+              name: "total",
+              type: "number",
+              label: "Total",
               admin: {
                 components: {
-                  Field:
-                    '@/collections/Orders/components/OrderTotalPriceField#OrderTotalPriceField',
+                  Field: "@/collections/Orders/components/OrderTotalPriceField#OrderTotalPriceField",
                 },
               },
               required: true,
@@ -303,76 +289,76 @@ export const Orders: CollectionConfig = {
           ],
         },
         {
-          name: 'transactionID',
-          type: 'text',
-          label: 'Transaction ID',
+          name: "transactionID",
+          type: "text",
+          label: "Transaction ID",
           admin: {
             readOnly: true,
           },
         },
         {
-          name: 'status',
-          type: 'select',
-          label: 'Status',
+          name: "status",
+          type: "select",
+          label: "Status",
           // hooks: {
           //   afterChange: [restoreStocks], //[sendStatusEmail, restoreStocks]
           // },
           options: [
             {
-              label: 'Pending',
-              value: 'pending',
+              label: "Pending",
+              value: "pending",
             },
             {
-              label: 'Paid',
-              value: 'paid',
+              label: "Paid",
+              value: "paid",
             },
             {
-              label: 'Unpaid',
-              value: 'unpaid',
+              label: "Unpaid",
+              value: "unpaid",
             },
             {
-              label: 'Processing',
-              value: 'processing',
+              label: "Processing",
+              value: "processing",
             },
             {
-              label: 'Shipped',
-              value: 'shipped',
+              label: "Shipped",
+              value: "shipped",
             },
             {
-              label: 'Completed',
-              value: 'completed',
+              label: "Completed",
+              value: "completed",
             },
             {
-              label: 'Cancelled',
-              value: 'cancelled',
+              label: "Cancelled",
+              value: "cancelled",
             },
             {
-              label: 'Returned',
-              value: 'returned',
+              label: "Returned",
+              value: "returned",
             },
           ],
           required: true,
-          defaultValue: 'pending',
+          defaultValue: "pending",
         },
         {
-          name: 'shippingDate',
-          label: 'Shipping Date',
-          type: 'date',
+          name: "shippingDate",
+          label: "Shipping Date",
+          type: "date",
         },
         {
-          name: 'trackingNumber',
-          label: 'Tracking Number',
+          name: "trackingNumber",
+          label: "Tracking Number",
           admin: {
             readOnly: true,
           },
-          type: 'text',
+          type: "text",
         },
         {
-          name: 'orderNote',
-          label: 'Order Note',
-          type: 'textarea',
+          name: "orderNote",
+          label: "Order Note",
+          type: "textarea",
         },
       ],
     },
   ],
-}
+};

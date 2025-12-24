@@ -1,6 +1,8 @@
-import type { User } from '@/payload-types'
+import type { User, Customer } from '@/payload-types'
 
-export const checkRole = (allRoles: User['roles'] = [], user: User | null = null): boolean => {
+type Roles = User['role'] | Customer['role'];
+
+export const checkRole = (allRoles: Roles[] = [], user: User | Customer | null = null): boolean => {
   if (!user) {
     return false
   }
@@ -9,5 +11,5 @@ export const checkRole = (allRoles: User['roles'] = [], user: User | null = null
   //   return user?.role?.some((individualRole: string) => individualRole === role)
   // })
 
-  return allRoles.includes(user.role)
+  return allRoles.includes(user.role);
 }

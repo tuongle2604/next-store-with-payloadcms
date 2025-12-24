@@ -1,31 +1,19 @@
-import { create } from "zustand";
-// import { Customer } from "@repo/cms/types";
+// import { create } from "zustand";
+// import type { CustomerProfile } from "@/lib/payload/customer";
 
-export interface AuthState {
-  customer: CurrentCustomer | null;
-  isAuthenticated: boolean;
-  // login: (user: CurrentCustomer, token: string) => void;
-  logoutCustomer: () => void;
-  setCustomer: (user: CurrentCustomer) => void;
-}
+// export interface AuthState {
+//   isAuthenticated: boolean;
+//   customerProfile: CustomerProfile | null;
+//   setCustomerProfile: (profile: CustomerProfile | null) => void;
+// }
 
-const useAuthStore = create<AuthState>((set) => ({
-  customer: null,
-  isAuthenticated: false,
+// const useAuthStore = create<AuthState>((set) => ({
+//   customerProfile: null,
+//   isAuthenticated: false,
 
-  // login: (customer, token) => {
-  //   // persist token to cookie/localStorage here if needed
-  //   localStorage.setItem("token", token);
-  //   set({ customer, isAuthenticated: true });
-  // },
+//   setCustomerProfile: (customerProfile) => {
+//     set(() => ({ customerProfile, isAuthenticated: !!customerProfile }));
+//   },
+// }));
 
-  logoutCustomer: () => {
-    set({ customer: null, isAuthenticated: false });
-  },
-
-  setCustomer: (customer) => {
-    set(() => ({ customer, isAuthenticated: !!customer }));
-  },
-}));
-
-export { useAuthStore };
+// export { useAuthStore };

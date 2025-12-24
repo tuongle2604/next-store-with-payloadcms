@@ -22,21 +22,14 @@ export default async function ProductRelated({
       <div className="mb-8">
         <h2 className="text-2xl font-bold tracking-tight">You May Also Like</h2>
       </div>
-      <div className="grid grid-cols-2 gap-4 lg:gap-6 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
         {relatedProducts.map((product) => {
           return (
-            <div
-              key={product.id}
-              className="overflow-hidden rounded shadow-sm bg-card group"
-            >
-              <YnsLink
-                href={`/product/${product.slug}`}
-                className="block"
-                prefetch={false}
-              >
+            <div key={product.id} className="bg-card group overflow-hidden rounded shadow-sm">
+              <YnsLink href={`/product/${product.slug}`} className="block" prefetch={false}>
                 <Image
                   className={
-                    "w-full rounded-lg bg-neutral-100 object-cover object-center group-hover:opacity-80 transition-opacity"
+                    "w-full rounded-lg bg-neutral-100 object-cover object-center transition-opacity group-hover:opacity-80"
                   }
                   src={product.thumbnail || ""}
                   width={300}

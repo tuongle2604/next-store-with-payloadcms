@@ -19,12 +19,7 @@ interface OrderSummaryProps {
   setCartItems: (cartItems: CartItem[]) => void;
 }
 
-export function OrderSummary({
-  onCompleteOrder,
-  isFormValid,
-  cartItems,
-  setCartItems,
-}: OrderSummaryProps) {
+export function OrderSummary({ onCompleteOrder, isFormValid, cartItems, setCartItems }: OrderSummaryProps) {
   const {
     handleSubmit,
     formState: { isSubmitting },
@@ -33,10 +28,7 @@ export function OrderSummary({
   function setItemQuantity(updatedItem: CartItem, quantity: number) {
     const newItems = cartItems
       .map((item) => {
-        if (
-          updatedItem.productId === item.productId &&
-          updatedItem.variantId === item.variantId
-        ) {
+        if (updatedItem.productId === item.productId && updatedItem.variantId === item.variantId) {
           return { ...item, quantity };
         }
         return item;
@@ -57,15 +49,13 @@ export function OrderSummary({
     <Card className="sticky top-4">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ShoppingBag className="w-5 h-5" />
+          <ShoppingBag className="h-5 w-5" />
           Order Summary
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Cart Items */}
-        <div className="space-y-4">
-          {<CartItems items={cartItems} setItemQuantity={setItemQuantity} />}
-        </div>
+        <div className="space-y-4">{<CartItems items={cartItems} setItemQuantity={setItemQuantity} />}</div>
 
         <Separator />
 
@@ -77,19 +67,14 @@ export function OrderSummary({
           </div>
         </div>
 
-        <Button
-          className="w-full"
-          size="lg"
-          onClick={handleSubmit(onCompleteOrder)}
-          disabled={isSubmitting}
-        >
-          <Lock className="w-4 h-4 mr-2" />
+        <Button className="w-full" size="lg" onClick={handleSubmit(onCompleteOrder)} disabled={isSubmitting}>
+          <Lock className="mr-2 h-4 w-4" />
           {isSubmitting ? "Processing Order..." : "Complete Order"}
-          {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         </Button>
 
         <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-          <Lock className="w-4 h-4" />
+          <Lock className="h-4 w-4" />
           Secure checkout powered by SSL encryption
         </div>
       </CardContent>

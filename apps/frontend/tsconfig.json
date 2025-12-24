@@ -4,37 +4,17 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@lib/*": [
-        "./src/lib/*"
-      ],
-      "@repo/cms/*": [
-        "../payloadcms/src/*"
-      ],
-      "@repo/schemas/*": [
-        "../../packages/schemas/src/*"
-      ],
-      "@repo/shared-data/*": [
-        "../../packages/shared-data/src/*"
-      ]
+      "@/*": ["./src/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@repo/cms/*": ["../payloadcms/src/*"],
+      "@repo/schemas/*": ["../../packages/schemas/src/*"],
+      "@repo/shared-data/*": ["../../packages/shared-data/src/*"]
     },
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": [
-    "next-fix.d.ts",
-    "i18n.d.ts",
-    "**/*.mjs",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/script/**/*.ts"
-  ],
+  "include": ["next-fix.d.ts", "i18n.d.ts", "**/*.mjs", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "src/script/**/*.ts"],
   "references": [
     {
       "path": "../payloadcms"

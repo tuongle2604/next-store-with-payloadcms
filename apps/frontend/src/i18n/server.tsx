@@ -1,17 +1,13 @@
 import { IntlMessageFormat } from "intl-messageformat";
 import type { IntlNamespaceKeys, NamespacedKeys } from "./types";
+import messages from "../../messages/en-US.json";
 
 type En = typeof import("../../messages/en-US.json");
 
 // export const getLocale = async () => env.NEXT_PUBLIC_LANGUAGE;
 export const getLocale = async () => "en-US";
 
-export const getMessages = async () =>
-  (
-    (await import(`../../messages/${await getLocale()}.json`)) as {
-      default: En;
-    }
-  ).default;
+export const getMessages = async () => messages;
 
 export const getTranslations = async <
   TNamespaceKey extends IntlNamespaceKeys = never,

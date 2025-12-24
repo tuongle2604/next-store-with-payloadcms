@@ -1,11 +1,11 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from "payload";
 
-import { authenticated } from '../../access/authenticated'
-import { admins } from '@/access/admin'
-import { guest } from '@/access/guest'
+import { authenticated } from "../../access/authenticated";
+import { admins } from "@/access/admin";
+import { guest } from "@/access/guest";
 
 export const Users: CollectionConfig = {
-  slug: 'users',
+  slug: "users",
   access: {
     admin: authenticated,
     create: admins,
@@ -14,8 +14,9 @@ export const Users: CollectionConfig = {
     update: admins,
   },
   admin: {
-    defaultColumns: ['name', 'email'],
-    useAsTitle: 'name',
+    defaultColumns: ["name", "email"],
+    useAsTitle: "name",
+    group: "Page Settings",
   },
   auth: true,
   fields: [
@@ -27,19 +28,22 @@ export const Users: CollectionConfig = {
     //   },
     // },
     {
-      name: 'name',
-      type: 'text',
+      name: "name",
+      type: "text",
     },
     {
-      name: 'role',
-      type: 'select',
+      name: "role",
+      type: "select",
       options: [
-        { label: 'Admin', value: 'admin' },
-        { label: 'Guest', value: 'guest' },
+        { label: "Admin", value: "admin" },
+        { label: "Guest", value: "guest" },
       ],
       required: true,
-      defaultValue: 'guest',
+      defaultValue: "guest",
+      admin: {
+        hidden: true,
+      },
     },
   ],
   timestamps: true,
-}
+};

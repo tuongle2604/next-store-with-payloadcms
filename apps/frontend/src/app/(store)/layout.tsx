@@ -14,7 +14,7 @@ export default async function StoreLayout({
     <>
       <Nav />
       <TooltipProvider>
-        <main className="flex flex-col flex-1 w-full px-4 pt-2 pb-6 mx-auto max-w-7xl sm:px-6 lg:px-8 lg:pt-6">
+        <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pt-2 pb-6 sm:px-6 lg:px-8 lg:pt-6">
           {children}
           <CartModal />
         </main>

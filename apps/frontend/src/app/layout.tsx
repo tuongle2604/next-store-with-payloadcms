@@ -1,33 +1,27 @@
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { IntlClientProvider } from "@/i18n/client";
-import { getLocale, getMessages, getTranslations } from "@/i18n/server";
 import type { Metadata } from "next";
-// import Script from "next/script";
+import { getMessages, getTranslations } from "@/i18n/server";
+// import(`../../messages/${await getLocale()}.json`)
+import messages from "../../messages/en-US.json";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations("Global.metadata");
   return {
-    title: t("title"),
+    title: "Next Store",
     description: t("description"),
-    metadataBase: new URL(process.env.NEXT_PUBLIC_API_URL || ""),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || ""),
   };
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // const messages = await getMessages();
   return (
-    <html lang={locale} className="h-full antialiased">
-      <body className="flex min-h-full flex-col">
-        <IntlClientProvider messages={messages} locale={locale}>
-          <div
-            className="flex min-h-full flex-1 flex-col bg-white"
-            vaul-drawer-wrapper=""
-          >
+    <html lang={"en-US"} className="h-full antialiased">
+      <body className="flex flex-col min-h-full">
+        <IntlClientProvider messages={messages} locale={"en-US"}>
+          <div className="flex flex-col flex-1 min-h-full bg-white" vaul-drawer-wrapper="">
             {children}
           </div>
           <Toaster position="bottom-right" offset={10} richColors />

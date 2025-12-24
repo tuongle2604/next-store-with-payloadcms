@@ -1,16 +1,55 @@
+"use client";
 import { CheckCircle, Package, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useSessionStorage } from "usehooks-ts";
+// import { useRouter } from "next/navigation";
+// import { useParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function CheckoutSuccess() {
-  // In a real app, this would come from URL params or API
-  const orderDetails = {
-    orderNumber: "ORD-2024-001234",
-    email: "customer@example.com",
-    total: "$129.99",
-    estimatedDelivery: "3-5 business days",
-  };
+  const [status, setStatus] = useState("loading");
+  const [orderDetails, setOrderDetails] = useState({});
+  const [orderJson] = useSessionStorage("order", "");
+
+  // const order = orderJson ? JSON.parse(orderJson) : null;
+
+  // const orderDetails = {
+  //   orderNumber: `ORD-${orderId}`,
+  //   email: order?.shippingInfo?.email,
+  //   total: order?.cartItems?.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0),
+  //   estimatedDelivery: "3-5 business days",
+  // };
+
+  useEffect(() => {
+    const order = orderJson ? JSON.parse(orderJson) : null;
+    // const orderId = searchParams.get("orderId");
+
+    if (!order) {
+      setStatus("notfound");
+      return;
+    }
+
+    const orderDetails = {
+      orderNumber: `ORD-${order?.orderId}`,
+      email: order?.shippingInfo?.email,
+      total: order?.cartItems?.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0),
+      estimatedDelivery: "3-5 business days",
+    };
+
+    setOrderDetails(orderDetails);
+    setStatus("success");
+  }, []);
+
+  if (status === "loading") {
+    return <div className="text-center">Loading...</div>;
+  }
+
+  if (status === "notfound") {
+    return <div className="text-center text-red-500">No order found</div>;
+  }
 
   return (
     <div className="space-y-8">
@@ -20,12 +59,9 @@ export default function CheckoutSuccess() {
           <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            Order Confirmed!
-          </h1>
+          <h1 className="text-3xl font-bold text-foreground">Order Confirmed!</h1>
           <p className="mt-2 text-muted-foreground">
-            Thank you for your purchase. Your order has been successfully
-            placed.
+            Thank you for your purchase. Your order has been successfully placed.
           </p>
         </div>
       </div>
@@ -46,7 +82,7 @@ export default function CheckoutSuccess() {
             </div>
             <div>
               <p className="text-muted-foreground">Total Amount</p>
-              <p className="font-medium">{orderDetails.total}</p>
+              <p className="font-medium">{orderDetails.total}$</p>
             </div>
             <div>
               <p className="text-muted-foreground">Email</p>
@@ -75,8 +111,7 @@ export default function CheckoutSuccess() {
               <div>
                 <p className="font-medium">Confirmation Email</p>
                 <p className="text-sm text-muted-foreground">
-                  We've sent a confirmation email with your order details to{" "}
-                  {orderDetails.email}
+                  We've sent a confirmation email with your order details to {orderDetails.email}
                 </p>
               </div>
             </div>
@@ -85,8 +120,7 @@ export default function CheckoutSuccess() {
               <div>
                 <p className="font-medium">Order Processing</p>
                 <p className="text-sm text-muted-foreground">
-                  Your order is being prepared and will be shipped within 1-2
-                  business days
+                  Your order is being prepared and will be shipped within 1-2 business days
                 </p>
               </div>
             </div>
@@ -105,10 +139,7 @@ export default function CheckoutSuccess() {
 
       {/* Action Buttons */}
       <div className="flex flex-col justify-center gap-4 sm:flex-row">
-        <Button
-          variant="outline"
-          className="flex items-center gap-2 bg-transparent"
-        >
+        <Button variant="outline" className="flex items-center gap-2 bg-transparent">
           Track Your Order
           <ArrowRight className="w-4 h-4" />
         </Button>
@@ -125,10 +156,7 @@ export default function CheckoutSuccess() {
         <p>Need help with your order?</p>
         <p>
           Contact us at{" "}
-          <a
-            href="mailto:support@example.com"
-            className="text-primary hover:underline"
-          >
+          <a href="mailto:support@example.com" className="text-primary hover:underline">
             support@example.com
           </a>{" "}
           or call{" "}

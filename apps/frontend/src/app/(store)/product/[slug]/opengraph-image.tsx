@@ -1,4 +1,3 @@
-import { getLocale } from "@/i18n/server";
 import { formatMoney } from "@/lib/utils";
 // import { accountGet, productGet } from "commerce-kit";
 import { ImageResponse } from "next/og";
@@ -12,11 +11,8 @@ export const size = {
 export const contentType = "image/png";
 export const alt = "";
 
-export default async function Image(props: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function Image(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const locale = await getLocale();
   // const geistRegular = fetch(new URL("./Geist-Regular.ttf", import.meta.url)).then((res) =>
   // 	res.arrayBuffer(),
   // );
@@ -28,7 +24,7 @@ export default async function Image(props: {
   //     productGet({ slug: params.slug }),
   //   ]);
   const product = await getProductDetail(params.slug);
-  const defaultVariant = product.variants?.[0];
+  const defaultVariant = product?.variants?.[0];
   const defaultImage = defaultVariant?.images?.[0]?.url;
 
   if (!product || !product.variants || product.variants.length === 0) {
@@ -55,9 +51,9 @@ export default async function Image(props: {
         </div>
         <div tw="flex-1 flex flex-col items-center justify-center border-l border-neutral-200">
           <div tw="w-full mt-8 text-left px-16 font-normal text-4xl">
-            "Your Next Store"
+            "Next Store"
             {/* {accountResult?.account?.business_profile?.name ??
-              "Your Next Store"} */}
+              "Next Store"} */}
           </div>
           <div tw="flex-1 -mt-8 flex flex-col items-start justify-center px-16">
             <p tw="font-black text-5xl mb-0">{product.name}</p>
@@ -65,7 +61,6 @@ export default async function Image(props: {
               {formatMoney({
                 amount: defaultVariant?.price ?? 0,
                 currency: "USD",
-                locale,
               })}
             </p>
             <p tw="font-normal text-xl max-h-[7rem]">{product.description}</p>
@@ -90,6 +85,6 @@ export default async function Image(props: {
       // 	// 	weight: 700,
       // 	// },
       // ],
-    }
+    },
   );
 }

@@ -19,7 +19,7 @@ export default function CartItems({ items, setItemQuantity }: CartItemsProps) {
           {cartItem.images[0] ? (
             <div className="col-span-1 row-span-2 bg-neutral-100">
               <Image
-                className="object-cover rounded-md aspect-square"
+                className="aspect-square rounded-md object-cover"
                 src={cartItem.images[0].url || ""}
                 width={80}
                 height={80}
@@ -30,22 +30,19 @@ export default function CartItems({ items, setItemQuantity }: CartItemsProps) {
             <div className="col-span-1 row-span-2" />
           )}
 
-          <h3 className="-mt-1 font-semibold leading-tight">
+          <h3 className="-mt-1 leading-tight font-semibold">
             {cartItem.name}
             {/* {formatProductName(cartItem.name, cartItem.variantId)} */}
           </h3>
-          <p className="text-sm font-medium leading-none">
+          <p className="text-sm leading-none font-medium">
             {formatMoney({
               amount: cartItem.price,
               currency: "USD",
               locale: "en-US",
             })}
           </p>
-          <div className="self-end text-sm font-medium text-muted-foreground">
-            <Counter
-              number={cartItem.quantity}
-              setNumber={(number) => setItemQuantity(cartItem, number)}
-            />
+          <div className="text-muted-foreground self-end text-sm font-medium">
+            <Counter number={cartItem.quantity} setNumber={(number) => setItemQuantity(cartItem, number)} />
           </div>
         </li>
       ))}

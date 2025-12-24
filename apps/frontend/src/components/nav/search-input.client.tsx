@@ -11,14 +11,10 @@ const inputClasses = cn(
   "max-smb:focus:w-[calc(100vw-2rem)] max-smb:cursor-default max-smb:focus:left-4 max-smb:focus:z-20 max-smb:focus:opacity-100",
   "smb:opacity-100 smb:w-full smb:pl-4 smb:pr-10 smb:inline-block smb:static",
   "md:pl-2 md:pr-8 md:max-w-72",
-  "lg:pl-4 lg:pr-10"
+  "lg:pl-4 lg:pr-10",
 );
 
-export const SearchInputPlaceholder = ({
-  placeholder,
-}: {
-  placeholder: string;
-}) => {
+export const SearchInputPlaceholder = ({ placeholder }: { placeholder: string }) => {
   return (
     <Input
       className={cn("pointer-events-none", inputClasses)}

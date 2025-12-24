@@ -9,17 +9,21 @@ type IntlClientProviderValue = { messages: IntlMessages; locale: string };
 const IntlClientContext = createContext<IntlClientProviderValue | null>(null);
 
 export const IntlClientProvider = ({
-	messages,
-	locale,
-	children,
-}: { messages: IntlMessages; locale: string; children: ReactNode }) => {
-	return <IntlClientContext value={{ locale, messages }}>{children}</IntlClientContext>;
+  messages,
+  locale,
+  children,
+}: {
+  messages: IntlMessages;
+  locale: string;
+  children: ReactNode;
+}) => {
+  return <IntlClientContext value={{ locale, messages }}>{children}</IntlClientContext>;
 };
 
 export const useTranslations = <TNamespaceKey extends IntlNamespaceKeys = never>(
-	namespaceKey: TNamespaceKey,
+  namespaceKey: TNamespaceKey,
 ) => {
-	const ctx = use(IntlClientContext);
-	invariant(ctx, "useTranslations must be used within a IntlClientProvider");
-	return getMessagesInternal(namespaceKey, ctx.locale, ctx.messages);
+  const ctx = use(IntlClientContext);
+  invariant(ctx, "useTranslations must be used within a IntlClientProvider");
+  return getMessagesInternal(namespaceKey, ctx.locale, ctx.messages);
 };

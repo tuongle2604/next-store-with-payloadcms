@@ -1,54 +1,53 @@
-import { revalidateTag } from 'next/cache'
-import { type CollectionConfig } from 'payload'
-import { registerCustomer } from './endpoints/registerCustomer'
-import { validateCustomer } from './hooks/validateCustomer'
-import { preventEmailChange } from './hooks/preventEmailChange'
-import { render } from '@react-email/components'
-import { VerifyAccountEmail } from '@/components/Emails/VerifyAccountEmail'
-import { admins } from '@/access/admin'
-import { authenticated } from '@/access/authenticated'
-import { disabledForgotPassword } from './endpoints/forgotPassword'
+import { type CollectionConfig } from "payload";
+import { registerCustomer } from "./endpoints/registerCustomer";
+import { validateCustomer } from "./hooks/validateCustomer";
+import { preventEmailChange } from "./hooks/preventEmailChange";
+import { render } from "@react-email/components";
+import { VerifyAccountEmail } from "@/components/Emails/VerifyAccountEmail";
+// import { admins } from "@/access/admin";
+// import { authenticated } from "@/access/authenticated";
+import { disabledForgotPassword } from "./endpoints/forgotPassword";
+import { countryList } from "@repo/shared-data/countries";
+import { readCustomer, updateCustomer, deleteCustomer } from "@/access/customers";
 
 export const Customers: CollectionConfig = {
-  slug: 'customers',
+  slug: "customers",
   access: {
-    admin: authenticated,
-    create: admins,
-    delete: admins,
-    read: authenticated,
-    update: admins,
+    create: () => true,
+    delete: deleteCustomer,
+    read: readCustomer,
+    update: updateCustomer,
   },
   labels: {
-    singular: 'Customer',
-    plural: 'Customers list',
+    singular: "Customer",
+    plural: "Customers",
   },
   admin: {
-    group: 'Clients',
-    defaultColumns: ['fullName', 'email', 'createdAt', 'updatedAt'],
-    useAsTitle: 'fullName',
+    group: "Clients",
+    defaultColumns: ["fullName", "email", "createdAt", "updatedAt"],
+    useAsTitle: "fullName",
   },
   auth: {
     maxLoginAttempts: 10,
     lockTime: 30 * 1000,
-    removeTokenFromResponses: true,
+    // disableLocalStrategy: true,
+    // removeTokenFromResponses: true,
     verify: {
       generateEmailHTML: async ({ req, token, user }) => {
         return await render(
           await VerifyAccountEmail({
             url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/auth/verify-email?token=${token}`,
-            name: user.fullName ?? 'Customer',
+            name: user.email || "Customer",
           }),
-        )
+        );
       },
       generateEmailSubject: ({ req, user }) => {
-        return `Verify your email!`
+        return `Verify your email!`;
       },
     },
     cookies: {
-      // secure: true,
-      sameSite: 'Lax',
-      secure: false,
-      // domain: 'hhttp://localhost:8080/',
+      secure: false, // irrelevant once disabled
+      sameSite: "Lax",
     },
   },
   endpoints: [registerCustomer, disabledForgotPassword],
@@ -56,27 +55,42 @@ export const Customers: CollectionConfig = {
     beforeValidate: [validateCustomer, preventEmailChange],
     beforeChange: [
       async ({ data }) => {
-        return { ...data, fullName: `${data.firstName} ${data.lastName}` }
+        if (data.firstName || data.lastName) {
+          return { ...data, fullName: [data.firstName, data.lastName].filter(Boolean).join(" ") };
+        }
+
+        return { ...data, fullName: data.email };
       },
     ],
     afterError: [
       ({ error, result }) => {
-        console.log(error)
+        console.log(error);
       },
     ],
   },
   fields: [
     {
-      name: 'email',
-      type: 'email',
+      name: "role",
+      type: "select",
+      options: [{ label: "Customer", value: "customer" }],
+      required: true,
+      defaultValue: "customer",
+      admin: {
+        readOnly: true,
+        hidden: true,
+      },
+    },
+    {
+      name: "email",
+      type: "email",
       required: true,
       admin: {
         readOnly: true,
       },
     },
     {
-      name: 'fullName',
-      type: 'text',
+      name: "fullName",
+      type: "text",
       admin: {
         hidden: true,
       },
@@ -84,174 +98,153 @@ export const Customers: CollectionConfig = {
       // virtual: true,
     },
     {
-      type: 'row',
+      type: "row",
       fields: [
         {
-          name: 'firstName',
-          label: 'First Name',
-          type: 'text',
+          name: "firstName",
+          label: "First Name",
+          type: "text",
+          saveToJWT: true,
         },
         {
-          name: 'lastName',
-          label: 'Last Name',
-          type: 'text',
+          name: "lastName",
+          label: "Last Name",
+          type: "text",
+          saveToJWT: true,
         },
       ],
     },
     {
-      type: 'row',
+      type: "row",
       fields: [
         {
-          name: 'birthDate',
-          label: 'Birth Date',
-          type: 'date',
-          admin: {
-            width: '50%',
-          },
+          name: "phone",
+          label: "Phone",
+          type: "text",
+          saveToJWT: true,
         },
         {
-          name: 'lastBuyerType',
-          label: 'Last Buyer Type',
-          type: 'select',
-          admin: {
-            width: '50%',
-          },
-          options: [
-            { value: 'individual', label: 'Individual' },
-            { value: 'company', label: 'Company' },
-          ],
+          name: "bio",
+          label: "bio",
+          type: "text",
         },
       ],
     },
     {
-      name: 'shippings',
-      type: 'array',
-      label: 'Shipping adresses',
-      // labels: {
-      //   singular: {
-      //     en: "Shipping address",
-      //     pl: "Adres dostawy",
-      //   },
-      //   plural: {
-      //     en: "Shipping addresses",
-      //     pl: "Adresy dostaw",
-      //   },
-      // },
-      // admin: {
-      //   initCollapsed: true,
-      //   components: {
-      //     RowLabel:
-      //       "@/collections/Customers/ui/RowLabels/ShippingAddressRowLabel#ShippingAddressRowLabel",
-      //   },
-      // },
+      name: "shippings",
+      type: "array",
+      label: "Shipping adresses",
+      labels: {
+        singular: "Shipping address",
+        plural: "Shipping addresses",
+      },
+      admin: {
+        initCollapsed: true,
+        components: {
+          RowLabel: "@/collections/Customers/ui/RowLabels/ShippingAddressRowLabel#ShippingAddressRowLabel",
+        },
+      },
       fields: [
         {
-          name: 'name',
-          type: 'text',
-          label: 'Name',
+          name: "name",
+          type: "text",
+          label: "Name",
           required: true,
         },
         {
-          name: 'address',
-          type: 'text',
-          label: 'Address',
+          name: "address",
+          type: "text",
+          label: "Address",
           required: true,
         },
         {
-          type: 'row',
+          type: "row",
           fields: [
             {
-              name: 'city',
-              type: 'text',
-              label: 'City',
+              name: "city",
+              type: "text",
+              label: "City",
               admin: {
-                width: '50%',
+                width: "50%",
               },
               required: true,
             },
             {
-              name: 'country',
-              type: 'text',
-              // type: "select",
-              // label: {
-              //   en: "Country",
-              //   pl: "Kraj",
-              // },
-              // admin: {
-              //   width: "50%",
-              // },
-              // options: [...countryList],
+              name: "country",
+              type: "select",
+              label: "Country",
+              admin: {
+                width: "50%",
+              },
+              options: [...countryList],
               required: true,
             },
           ],
         },
         {
-          type: 'row',
+          type: "row",
           fields: [
             {
-              name: 'region',
-              type: 'text',
-              label: 'Region',
+              name: "region",
+              type: "text",
+              label: "Region",
               required: true,
             },
             {
-              name: 'postalCode',
-              type: 'text',
-              label: 'Postal Code',
+              name: "postalCode",
+              type: "text",
+              label: "Postal Code",
               required: true,
             },
           ],
         },
         {
-          type: 'row',
+          type: "row",
           fields: [
             {
-              name: 'phone',
-              type: 'text',
-              label: 'Phone',
+              name: "phone",
+              type: "text",
+              label: "Phone",
               required: true,
             },
             {
-              name: 'email',
-              type: 'text',
-              label: 'Email',
+              name: "email",
+              type: "text",
+              label: "Email",
               required: true,
             },
           ],
         },
         {
-          name: 'default',
-          type: 'checkbox',
-          label: 'Default',
+          name: "default",
+          type: "checkbox",
+          label: "Default",
           defaultValue: false,
         },
       ],
     },
-    // {
-    //   name: "orders",
-    //   label: {
-    //     en: "Client Orders",
-    //     pl: "Zamówienia klienta",
-    //   },
-    //   type: "join",
-    //   collection: "orders",
-    //   on: "customer",
-    // },
     {
-      name: 'cart',
-      type: 'json',
-      label: 'Cart',
+      name: "orders",
+      label: "Client Orders",
+      type: "join",
+      collection: "orders",
+      on: "customer",
+    },
+    {
+      name: "cart",
+      type: "json",
+      label: "Cart",
       admin: {
         hidden: true,
       },
     },
     {
-      name: 'wishlist',
-      type: 'json',
-      label: 'Wishlist',
+      name: "wishlist",
+      type: "json",
+      label: "Wishlist",
       admin: {
         hidden: true,
       },
     },
   ],
-}
+};

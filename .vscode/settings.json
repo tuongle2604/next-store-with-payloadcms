@@ -1,5 +1,10 @@
 {
+  "github.copilot.enable": {
+    "*": true, // Copilot enabled for other files
+    "dotenv": false // Copilot disabled for .env files
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.prettierPath": "./node_modules/prettier/index.cjs",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,

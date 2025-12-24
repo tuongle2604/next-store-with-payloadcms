@@ -19,18 +19,18 @@ export const ProductBottomStickyCard = ({
     <div
       tabIndex={show ? 0 : -1}
       className={cn(
-        "fixed bottom-0 max-w-[100vw] left-0 right-0 bg-white/90 backdrop-blur-xs border-t py-2 sm:py-4 transition-all duration-300 ease-out z-10",
+        "fixed right-0 bottom-0 left-0 z-10 max-w-[100vw] border-t bg-white/90 py-2 backdrop-blur-xs transition-all duration-300 ease-out sm:py-4",
         show
-          ? "transform translate-y-0 shadow-[0_-4px_6px_-1px_rgb(0_0_0_/_0.1),_0_-2px_4px_-2px_rgb(0_0_0_/_0.1)]"
-          : "transform translate-y-full"
+          ? "translate-y-0 transform shadow-[0_-4px_6px_-1px_rgb(0_0_0_/_0.1),_0_-2px_4px_-2px_rgb(0_0_0_/_0.1)]"
+          : "translate-y-full transform",
       )}
     >
-      <div className="flex items-center justify-between w-full px-4 mx-auto max-w-7xl gap-x-2 sm:px-6 lg:px-8">
-        <div className="flex items-center min-w-0 gap-x-2 sm:gap-x-4">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-x-2 px-4 sm:px-6 lg:px-8">
+        <div className="flex min-w-0 items-center gap-x-2 sm:gap-x-4">
           <div className="shrink-0">
             {cartItem?.productId && (
               <MainProductImage
-                className="object-cover object-center w-16 h-16 rounded-lg bg-neutral-100"
+                className="h-16 w-16 rounded-lg bg-neutral-100 object-cover object-center"
                 src={cartItem.images[0]?.url || ""}
                 loading="eager"
                 priority
@@ -38,8 +38,8 @@ export const ProductBottomStickyCard = ({
               />
             )}
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-xs font-semibold sm:text-base md:text-lg whitespace-nowrap text-ellipsis overflow-clip">
+          <div className="min-w-0 flex-1">
+            <h3 className="overflow-clip text-xs font-semibold text-ellipsis whitespace-nowrap sm:text-base md:text-lg">
               {cartItem.name}
             </h3>
 
@@ -47,8 +47,7 @@ export const ProductBottomStickyCard = ({
               <p className="text-xs sm:text-sm">
                 {formatMoney({
                   amount: cartItem.price,
-                  currency: "USD",
-                  locale,
+                  currency: "USD"
                 })}
               </p>
             )}
@@ -58,7 +57,7 @@ export const ProductBottomStickyCard = ({
         <AddToCartButton
           cartItem={cartItem}
           disabled={cartItem.stock <= 0}
-          className="px-3 text-sm sm:text-lg sm:px-8 shrink-0 h-9 sm:h-10"
+          className="h-9 shrink-0 px-3 text-sm sm:h-10 sm:px-8 sm:text-lg"
         />
       </div>
     </div>

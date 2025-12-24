@@ -9,13 +9,7 @@ interface PaymentSectionProps {
   onCardError: (error: string | null) => void;
 }
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
-);
-console.log(
-  "Stripe Publishable Key:",
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
 export function PaymentForm({ onCardError }: PaymentSectionProps) {
   // const cardElementOptions = {
@@ -38,14 +32,14 @@ export function PaymentForm({ onCardError }: PaymentSectionProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5" />
+            <CreditCard className="h-5 w-5" />
             Payment Information
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="card-element">Card Details *</Label>
-            <div className="p-3 border rounded-md bg-background">
+            <div className="bg-background rounded-md border p-3">
               {/* <PaymentElement /> */}
               {/* <CardElement
                 id="card-element"
@@ -56,8 +50,8 @@ export function PaymentForm({ onCardError }: PaymentSectionProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Lock className="w-4 h-4" />
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
+            <Lock className="h-4 w-4" />
             Your payment information is secure and encrypted
           </div>
         </CardContent>

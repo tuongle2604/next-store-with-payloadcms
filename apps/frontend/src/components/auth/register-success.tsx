@@ -4,13 +4,7 @@ import type React from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Mail, CheckCircle, ArrowLeft } from "lucide-react";
 import { useSessionStorage } from "usehooks-ts";
@@ -44,9 +38,7 @@ export function RegisterSuccess({
             <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
           <div className="space-y-2">
-            <CardTitle className="text-2xl font-bold">
-              Registration Successful!
-            </CardTitle>
+            <CardTitle className="text-2xl font-bold">Registration Successful!</CardTitle>
             <CardDescription className="text-base">
               We've sent a verification email to your inbox
             </CardDescription>
@@ -56,9 +48,8 @@ export function RegisterSuccess({
           <Alert>
             <Mail className="h-4 w-4" />
             <AlertDescription>
-              Please check your email{" "}
-              <strong suppressHydrationWarning={true}>{email}</strong> and click
-              the verification link to activate your account.
+              Please check your email <strong suppressHydrationWarning={true}>{email}</strong> and click the
+              verification link to activate your account.
             </AlertDescription>
           </Alert>
 
@@ -96,10 +87,7 @@ export function RegisterSuccess({
       <div className="text-muted-foreground mx-auto max-w-md text-center text-xs">
         <p>
           If you continue to have problems, please{" "}
-          <a
-            href="/support"
-            className="hover:text-primary underline underline-offset-4"
-          >
+          <a href="/support" className="hover:text-primary underline underline-offset-4">
             contact our support team
           </a>
         </p>

@@ -3,6 +3,7 @@ import StoreConfig from "@/store.config";
 import { Newsletter } from "@/components/footer/newsletter.client";
 import { YnsLink } from "@/components/ui/yns-link";
 import type { SVGAttributes } from "react";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 const sections = [
   {
@@ -17,15 +18,15 @@ const sections = [
     links: [
       {
         label: "Features",
-        href: "https://yournextstore.com/#features",
+        href: "#features",
       },
       {
         label: "Pricing",
-        href: "https://yournextstore.com/#pricing",
+        href: "#pricing",
       },
       {
         label: "Contact Us",
-        href: "mailto:hi@yournextstore.com",
+        href: "#contactus",
       },
     ],
   },
@@ -51,10 +52,7 @@ export async function Footer() {
               <ul role="list" className="grid gap-1">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <YnsLink
-                      className="underline-offset-4 hover:underline"
-                      href={link.href}
-                    >
+                    <YnsLink className="underline-offset-4 hover:underline" href={link.href}>
                       {link.label}
                     </YnsLink>
                   </li>
@@ -66,23 +64,17 @@ export async function Footer() {
       </div>
       <div className="container mt-8 flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-neutral-500 md:flex-row">
         <div>
-          <p>© 2024 Your Next Store</p>
+          <p>© 2024 Next Store</p>
           <p>Delightful commerce for everyone</p>
         </div>
         <div className="flex items-center gap-4">
           <YnsLink
+            href="https://github.com/tuongle2604/next-store-with-payloadcms"
             className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
-            href="https://x.com/zaiste"
+            target="_blank"
           >
-            <TwitterIcon className="h-4 w-4" /> @zaiste
-            <span className="sr-only">Twitter</span>
-          </YnsLink>
-          <YnsLink
-            className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
-            href="https://x.com/typeofweb"
-          >
-            <TwitterIcon className="h-4 w-4" /> @typeofweb
-            <span className="sr-only">Twitter</span>
+            <GitHubLogoIcon className="h-6 w-6" />
+            <span className="sr-only">GitHub</span>
           </YnsLink>
         </div>
       </div>
@@ -92,12 +84,7 @@ export async function Footer() {
 
 function TwitterIcon(props: SVGAttributes<SVGSVGElement>) {
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 596 596"
-      fill="none"
-    >
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 596 596" fill="none">
       <path
         fill="#fff"
         d="m1 19 230 307L0 577h52l203-219 164 219h177L353 252 568 19h-52L329 221 179 19H1Zm77 38h82l359 481h-81L78 57Z"

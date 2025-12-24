@@ -4,13 +4,7 @@ import type React from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle, XCircle, Loader2, Mail } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -31,9 +25,7 @@ export function EmailVerify({
     const handleVerifyEmail = async () => {
       if (!token) {
         setStatus("error");
-        setMessage(
-          "Invalid verification link. Please check your email for the correct link.",
-        );
+        setMessage("Invalid verification link. Please check your email for the correct link.");
         return;
       }
 
@@ -45,9 +37,7 @@ export function EmailVerify({
       }
 
       setStatus("success");
-      setMessage(
-        "Your email has been successfully verified! You can now log in to your account.",
-      );
+      setMessage("Your email has been successfully verified! You can now log in to your account.");
     };
 
     handleVerifyEmail();
@@ -63,9 +53,7 @@ export function EmailVerify({
       case "loading":
         return <Loader2 className="h-8 w-8 animate-spin text-blue-600" />;
       case "success":
-        return (
-          <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
-        );
+        return <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />;
       case "error":
       case "expired":
         return <XCircle className="h-8 w-8 text-red-600 dark:text-red-400" />;
@@ -112,9 +100,7 @@ export function EmailVerify({
           <div className="space-y-2">
             <CardTitle className="text-2xl font-bold">{getTitle()}</CardTitle>
             {status === "loading" && (
-              <CardDescription>
-                Please wait while we verify your email address...
-              </CardDescription>
+              <CardDescription>Please wait while we verify your email address...</CardDescription>
             )}
           </div>
         </CardHeader>
@@ -122,15 +108,12 @@ export function EmailVerify({
           <Alert
             className={cn(
               status === "loading" && "hidden",
-              status === "success" &&
-                "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950",
+              status === "success" && "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950",
               (status === "error" || status === "expired") &&
                 "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950",
             )}
           >
-            <AlertDescription className="text-center">
-              {message}
-            </AlertDescription>
+            <AlertDescription className="text-center">{message}</AlertDescription>
           </Alert>
 
           <div className="flex flex-col gap-3">
@@ -146,22 +129,14 @@ export function EmailVerify({
                   <Mail className="w-4 h-4 mr-2" />
                   Send New Verification Email
                 </Button> */}
-                <Button
-                  variant="outline"
-                  className="w-full bg-transparent"
-                  asChild
-                >
+                <Button variant="outline" className="w-full bg-transparent" asChild>
                   <a href="/auth/register">Back to Registration</a>
                 </Button>
               </>
             )}
 
             {status === "loading" && (
-              <Button
-                variant="outline"
-                className="w-full bg-transparent"
-                asChild
-              >
+              <Button variant="outline" className="w-full bg-transparent" asChild>
                 <a href="/auth/login">Back to Login</a>
               </Button>
             )}
@@ -172,10 +147,7 @@ export function EmailVerify({
       <div className="text-muted-foreground mx-auto max-w-md text-center text-xs">
         <p>
           Need help?{" "}
-          <a
-            href="#upport"
-            className="hover:text-primary underline underline-offset-4"
-          >
+          <a href="#upport" className="hover:text-primary underline underline-offset-4">
             Contact Support
           </a>
         </p>
