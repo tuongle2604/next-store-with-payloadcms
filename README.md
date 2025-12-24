@@ -100,11 +100,16 @@ Frontend runs at [`http://localhost:3000`](http://localhost:3000)
 
 Each app inside the apps/ folder is deployed independently using its own Dockerfile.
 
-Build images
+Build images from the repository root:
 
-From the repository root:
+Payloadcms
 
 ```sh
 docker build -t next-store-cms:latest -f apps/payload/Dockerfile .
-docker build -t next-store-fe:latest -f apps/web/Dockerfile .
+```
+
+Frontend
+
+```sh
+docker build -t next-store-fe:latest -f apps/frontend/Dockerfile .
 ```
