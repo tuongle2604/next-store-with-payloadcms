@@ -3,7 +3,7 @@
 This repository is a Turborepo-powered monorepo containing:
 
 - **Frontend** — Next.js App Router based on [`yournextstore`](https://github.com/yournextstore/yournextstore)
-- **CMS backend** — Payload CMS for product, media, and content management
+- **CMS backend** — [Payload CMS](https://payloadcms.com/) for product, media, and content management
 - **Shared packages** — Reusable schemas, shared data, and lint configs
 
 ---
