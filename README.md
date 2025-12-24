@@ -95,3 +95,16 @@ CMS runs at [`http://localhost:8080`](http://localhost:8080)
 Frontend runs at [`http://localhost:3000`](http://localhost:3000)
 
 ---
+
+## 🚀 Deployment (Docker)
+
+Each app inside the apps/ folder is deployed independently using its own Dockerfile.
+
+Build images
+
+From the repository root:
+
+```sh
+docker build -t next-store-cms:latest -f apps/payload/Dockerfile .
+docker build -t next-store-fe:latest -f apps/web/Dockerfile .
+```
