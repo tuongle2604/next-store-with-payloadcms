@@ -78,17 +78,17 @@ export default buildConfig({
     process.env.APP_ENV === "production"
       ? vercelPostgresAdapter({
           pool: {
-            connectionString: process.env.DATABASE_URI || "",
+            connectionString: process.env.DATABASE_URL || "",
           },
         })
       : postgresAdapter({
           pool: {
-            connectionString: process.env.DATABASE_URI || "",
+            connectionString: process.env.DATABASE_URL || "",
           },
         }),
   // db: postgresAdapter({
   //   pool: {
-  //     connectionString: process.env.DATABASE_URI || "",
+  //     connectionString: process.env.DATABASE_URL || "",
   //     ssl:
   //       process.env.APP_ENV === "production"
   //         ? {

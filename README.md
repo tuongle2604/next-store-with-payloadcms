@@ -41,7 +41,7 @@ Payloadcms (apps/payloadcms/.env)
 APP_ENV=development   # or: production
 
 PAYLOAD_SECRET=XXXXXXXXXXXXXX
-DATABASE_URI=postgres://USER:PASS@HOST:5432/DATABASE
+DATABASE_URL=postgres://USER:PASS@HOST:5432/DATABASE
 NEXT_PUBLIC_CLIENT_URL=http://localhost:8080
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 IMAGE_BASE_URL=http://localhost:3000
