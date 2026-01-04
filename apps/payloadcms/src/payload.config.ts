@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import fs from "fs";
 
@@ -73,18 +74,30 @@ export default buildConfig({
     },
   },
   editor: defaultLexical,
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URI || "",
-      ssl:
-        process.env.APP_ENV === "production"
-          ? {
-              rejectUnauthorized: false,
-              ca: fs.readFileSync(sslPath).toString(),
-            }
-          : false,
-    },
-  }),
+  db:
+    process.env.APP_ENV === "production"
+      ? vercelPostgresAdapter({
+          pool: {
+            connectionString: process.env.DATABASE_URI || "",
+          },
+        })
+      : postgresAdapter({
+          pool: {
+            connectionString: process.env.DATABASE_URI || "",
+          },
+        }),
+  // db: postgresAdapter({
+  //   pool: {
+  //     connectionString: process.env.DATABASE_URI || "",
+  //     ssl:
+  //       process.env.APP_ENV === "production"
+  //         ? {
+  //             rejectUnauthorized: false,
+  //             ca: fs.readFileSync(sslPath).toString(),
+  //           }
+  //         : false,
+  //   },
+  // }),
   email: nodemailerAdapter({
     defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || "", //"Store" <testonly999999@gmail.com>
     defaultFromName: process.env.EMAIL_FROM_NAME || "",
