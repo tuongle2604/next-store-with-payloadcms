@@ -232,7 +232,7 @@ importers:
         specifier: 3.69.0
         version: 3.69.0(@vercel/postgres@0.9.0)(payload@3.69.0(bufferutil@4.1.0)(graphql@16.12.0)(typescript@5.8.3)(utf-8-validate@6.0.6))
       '@payloadcms/db-vercel-postgres':
-        specifier: ^3.69.0
+        specifier: 3.69.0
         version: 3.69.0(@types/pg@8.10.2)(payload@3.69.0(bufferutil@4.1.0)(graphql@16.12.0)(typescript@5.8.3)(utf-8-validate@6.0.6))
       '@payloadcms/email-nodemailer':
         specifier: 3.69.0
@@ -12459,7 +12459,7 @@ snapshots:
   tsx@4.20.3:
     dependencies:
       esbuild: 0.25.12
-      get-tsconfig: 4.8.1
+      get-tsconfig: 4.13.0
     optionalDependencies:
       fsevents: 2.3.3
 

@@ -76,11 +76,7 @@ export default buildConfig({
   editor: defaultLexical,
   db:
     process.env.APP_ENV === "production"
-      ? vercelPostgresAdapter({
-          pool: {
-            connectionString: process.env.DATABASE_URL || "",
-          },
-        })
+      ? vercelPostgresAdapter()
       : postgresAdapter({
           pool: {
             connectionString: process.env.DATABASE_URL || "",
