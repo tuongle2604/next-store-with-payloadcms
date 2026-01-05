@@ -139,9 +139,7 @@ export const Pages: CollectionConfig<"pages"> = {
   endpoints: [pageDetail],
   versions: {
     drafts: {
-      // autosave: {
-      //   interval: 100, // We set this interval for optimal live preview
-      // },
+      autosave: false,
       schedulePublish: true,
     },
     maxPerDoc: 50,
