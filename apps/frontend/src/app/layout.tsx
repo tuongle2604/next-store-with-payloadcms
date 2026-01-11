@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { getMessages, getTranslations } from "@/i18n/server";
 // import(`../../messages/${await getLocale()}.json`)
 import messages from "../../messages/en-US.json";
-
+import { Analytics } from "@vercel/analytics/next";
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations("Global.metadata");
   return {
@@ -34,6 +34,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 						data-website-id={env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
 					/>
 				)} */}
+        <Analytics />
       </body>
     </html>
   );
