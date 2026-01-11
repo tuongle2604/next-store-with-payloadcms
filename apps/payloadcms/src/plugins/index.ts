@@ -117,6 +117,12 @@ export const plugins: Plugin[] = [
       admin: {
         defaultColumns: ["title", "thumbnail", "description"],
       },
+      access: {
+        create: admins,
+        read: anyone,
+        update: admins,
+        delete: admins,
+      },
       fields: ({ defaultFields }) => {
         return [...defaultFields, ...searchFields];
       },
