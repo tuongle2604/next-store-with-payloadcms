@@ -1,7 +1,7 @@
 import { ProductListSearch } from "@/components/products/product-list-search";
 import { ProductNotFound } from "@/components/products/product-not-found";
 import { RedirectType, redirect } from "next/navigation";
-import { searchProducts } from "@/lib/payload/search";
+// import { searchProducts } from "@/lib/payload/search";
 import { Suspense } from "react";
 import { ProductListSkeleton } from "@/components/products/product-list-skeleton";
 
@@ -17,7 +17,7 @@ export default async function SearchPage(props: {
     return redirect("/", RedirectType.replace);
   }
 
-  const results = await searchProducts(query);
+  // const results = await searchProducts(query);
 
   return (
     <main>
@@ -26,7 +26,8 @@ export default async function SearchPage(props: {
       </h1>
 
       <Suspense fallback={<ProductListSkeleton itemsLength={6} />}>
-        {results?.length ? <ProductListSearch results={results} /> : <ProductNotFound query={query} />}
+        <ProductListSearch query={query} />
+        {/* {results?.length ? <ProductListSearch results={results} /> : <ProductNotFound query={query} />} */}
       </Suspense>
     </main>
   );

@@ -5,6 +5,7 @@ import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { KeyboardEvent } from "react";
 
 const inputClasses = cn(
   "appearance-none rounded-md absolute border bg-white py-2 pl-4 pr-10 w-9 opacity-0 transition-opacity ease-linear",
@@ -36,6 +37,16 @@ export const SearchInput = ({ placeholder }: { placeholder: string }) => {
   const [query, setQuery] = useState(searchParamQuery);
   const [_isQueryPending, debouncedQuery] = useDebouncedValue(query, 100);
 
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    const target = e.target as HTMLInputElement;
+
+    if (e.key === "Enter") {
+      setQuery(target.value);
+
+      // Trigger search or submit here
+    }
+  }
+
   useEffect(() => {
     router.prefetch(`/search?q=${encodeURIComponent(query)}`);
   }, [query, router]);
@@ -62,16 +73,13 @@ export const SearchInput = ({ placeholder }: { placeholder: string }) => {
 
   return (
     <Input
-      onChange={(e) => {
-        const query = e.target.value;
-        setQuery(query);
-      }}
+      onKeyDown={handleKeyDown}
       className={inputClasses}
       placeholder={placeholder}
       type="search"
       enterKeyHint="search"
       name="search"
-      value={query}
+      defaultValue={searchParamQuery}
     />
   );
 };

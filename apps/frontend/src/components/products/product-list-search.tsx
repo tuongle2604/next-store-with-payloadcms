@@ -1,10 +1,17 @@
 import { YnsLink } from "@/components/ui/yns-link";
 import Image from "next/image";
-import { Search } from "@repo/cms/types";
+import { searchProducts } from "@/lib/payload/search";
+import { ProductNotFound } from "@/components/products/product-not-found";
 
-export const ProductListSearch = async ({ results }: { results: Search[] }) => {
-  const blurDataURL =
-    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZWVlZSIvPjwvc3ZnPg==";
+const blurDataURL =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZWVlZSIvPjwvc3ZnPg==";
+
+export const ProductListSearch = async ({ query }: { query: string }) => {
+  const results = await searchProducts(query);
+
+  if (!results?.length) {
+    return <ProductNotFound query={query} />;
+  }
 
   return (
     <>
