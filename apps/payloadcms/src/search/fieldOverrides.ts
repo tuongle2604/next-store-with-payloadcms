@@ -1,61 +1,80 @@
-import { Field } from 'payload'
+import { Field } from "payload";
 
 export const searchFields: Field[] = [
   {
-    name: 'slug',
-    type: 'text',
+    name: "slug",
+    type: "text",
     index: true,
     admin: {
       readOnly: true,
     },
   },
+  // {
+  //   type: "text",
+  //   name: "title",
+  //   label: "Title",
+  // },
   {
-    name: 'meta',
-    label: 'Meta',
-    type: 'group',
-    index: true,
-    admin: {
-      readOnly: true,
-    },
-    fields: [
-      {
-        type: 'text',
-        name: 'title',
-        label: 'Title',
-      },
-      {
-        type: 'text',
-        name: 'description',
-        label: 'Description',
-      },
-      {
-        name: 'image',
-        label: 'Image',
-        type: 'upload',
-        relationTo: 'media',
-      },
-    ],
+    type: "text",
+    name: "description",
+    label: "Description",
   },
   {
-    label: 'Categories',
-    name: 'categories',
-    type: 'array',
+    name: "thumbnail",
+    type: "text",
     admin: {
-      readOnly: true,
+      components: {
+        Cell: "@/components/ImageCell",
+      },
     },
-    fields: [
-      {
-        name: 'relationTo',
-        type: 'text',
-      },
-      {
-        name: 'id',
-        type: 'text',
-      },
-      {
-        name: 'title',
-        type: 'text',
-      },
-    ],
   },
-]
+  // {
+  //   name: 'meta',
+  //   label: 'Meta',
+  //   type: 'group',
+  //   index: true,
+  //   admin: {
+  //     readOnly: true,
+  //   },
+  //   fields: [
+  //     {
+  //       type: 'text',
+  //       name: 'title',
+  //       label: 'Title',
+  //     },
+  //     {
+  //       type: 'text',
+  //       name: 'description',
+  //       label: 'Description',
+  //     },
+  //     {
+  //       name: 'image',
+  //       label: 'Image',
+  //       type: 'upload',
+  //       relationTo: 'media',
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: 'Categories',
+  //   name: 'categories',
+  //   type: 'array',
+  //   admin: {
+  //     readOnly: true,
+  //   },
+  //   fields: [
+  //     {
+  //       name: 'relationTo',
+  //       type: 'text',
+  //     },
+  //     {
+  //       name: 'id',
+  //       type: 'text',
+  //     },
+  //     {
+  //       name: 'title',
+  //       type: 'text',
+  //     },
+  //   ],
+  // },
+];

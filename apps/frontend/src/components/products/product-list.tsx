@@ -1,14 +1,14 @@
 import { formatMoney } from "@/lib/utils";
 import { JsonLd, mappedProductsToJsonLd } from "@/components/ui/json-ld";
 import { YnsLink } from "@/components/ui/yns-link";
-import type * as Commerce from "commerce-kit";
 import Image from "next/image";
-import { Product } from "@/lib/payload/payload-types";
+import { Product } from "@repo/cms/types";
+// import { Product } from "@/lib/payload/payload-types";
 
 export const ProductList = async ({ products }: { products: Product[] }) => {
   return (
     <>
-      <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product, idx) => {
           const variant = product?.variants?.[0];
           const image = variant?.images?.[0];
@@ -19,9 +19,9 @@ export const ProductList = async ({ products }: { products: Product[] }) => {
               <YnsLink href={`/product/${product.slug}`}>
                 <article className="overflow-hidden bg-white">
                   {image && (
-                    <div className="aspect-square w-full overflow-hidden rounded-lg bg-neutral-100">
+                    <div className="w-full overflow-hidden rounded-lg aspect-square bg-neutral-100">
                       <Image
-                        className="group-hover:rotate hover-perspective w-full bg-neutral-100 object-cover object-center transition-opacity group-hover:opacity-75"
+                        className="object-cover object-center w-full transition-opacity group-hover:rotate hover-perspective bg-neutral-100 group-hover:opacity-75"
                         src={image?.url}
                         width={768}
                         height={768}

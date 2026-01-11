@@ -27,6 +27,8 @@ import { ProductUnitPriceField as ProductUnitPriceField_ac0a25c24a470046f819aff5
 import { ProductTotalPriceField as ProductTotalPriceField_fe3ee1cdf30981e0aab8ebc7657e0a7e } from '@/collections/Orders/components/ProductTotalPriceField'
 import { OrderProductsRowLabel as OrderProductsRowLabel_ef464e9847ca45b8e681a6c2b533b411 } from '@/components/RowLabels/OrderProductsRowLabel'
 import { OrderTotalPriceField as OrderTotalPriceField_79f92b1f60e68d441eb5091db2ded9fc } from '@/collections/Orders/components/OrderTotalPriceField'
+import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
+import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { FolderTypeField as FolderTypeField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
 import { RowLabel as RowLabel_ec255a65fa6fa8d1faeb09cf35284224 } from '@/Header/RowLabel'
 import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/RowLabel'
@@ -64,6 +66,8 @@ export const importMap = {
   "@/collections/Orders/components/ProductTotalPriceField#ProductTotalPriceField": ProductTotalPriceField_fe3ee1cdf30981e0aab8ebc7657e0a7e,
   "@/components/RowLabels/OrderProductsRowLabel#OrderProductsRowLabel": OrderProductsRowLabel_ef464e9847ca45b8e681a6c2b533b411,
   "@/collections/Orders/components/OrderTotalPriceField#OrderTotalPriceField": OrderTotalPriceField_79f92b1f60e68d441eb5091db2ded9fc,
+  "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
+  "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/ui#FolderTypeField": FolderTypeField_3817bf644402e67bfe6577f60ef982de,
   "@/Header/RowLabel#RowLabel": RowLabel_ec255a65fa6fa8d1faeb09cf35284224,
   "@/Footer/RowLabel#RowLabel": RowLabel_1f6ff6ff633e3695d348f4f3c58f1466,

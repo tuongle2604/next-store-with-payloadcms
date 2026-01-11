@@ -134,6 +134,7 @@ const payloadSDK = {
   customers: createCollectionAPI("customers"),
   products: createCollectionAPI("products"),
   pages: createCollectionAPI("pages"),
+  search: createCollectionAPI("search"),
 };
 
 export default payloadSDK;

@@ -25,14 +25,13 @@ export const safeJsonParse = (str: string | null | undefined): unknown => {
 
 type PromiseToTupleResult<T> = [Error, null] | [null, Awaited<T>];
 export const unpackPromise = async <T extends Promise<unknown>>(
-  promise: T
+  promise: T,
 ): Promise<PromiseToTupleResult<T>> => {
   try {
     const result = await promise;
     return [null, result];
   } catch (maybeError) {
-    const error =
-      maybeError instanceof Error ? maybeError : new Error(String(maybeError));
+    const error = maybeError instanceof Error ? maybeError : new Error(String(maybeError));
     return [error, null];
   }
 };
@@ -60,30 +59,20 @@ export const pluralize = (count: number, words: CardinalWords) => {
   return words[rule] ?? words.other;
 };
 
-export const getFieldsByPrefix = <Prefix extends string, Obj extends object>(
-  obj: Obj,
-  prefix: Prefix
-) => {
+export const getFieldsByPrefix = <Prefix extends string, Obj extends object>(obj: Obj, prefix: Prefix) => {
   const prefixWithDot = prefix + ".";
   return Object.fromEntries(
     Object.entries(obj)
       .filter(([key]) => key.startsWith(prefixWithDot))
-      .map(([key, value]) => [key.slice(prefixWithDot.length), value])
+      .map(([key, value]) => [key.slice(prefixWithDot.length), value]),
   ) as {
-    [K in keyof Obj as K extends `${Prefix}.${infer Key}`
-      ? Key
-      : never]: Obj[K];
+    [K in keyof Obj as K extends `${Prefix}.${infer Key}` ? Key : never]: Obj[K];
   };
 };
 
-export const addPrefixToFields = <Prefix extends string, Obj extends object>(
-  obj: Obj,
-  prefix: Prefix
-) => {
+export const addPrefixToFields = <Prefix extends string, Obj extends object>(obj: Obj, prefix: Prefix) => {
   const prefixWithDot = prefix + ".";
-  return Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [prefixWithDot + key, value])
-  ) as {
+  return Object.fromEntries(Object.entries(obj).map(([key, value]) => [prefixWithDot + key, value])) as {
     [K in keyof Obj as `${Prefix}.${K & string}`]: Obj[K];
   };
 };
@@ -101,8 +90,7 @@ export const slugify = (text: string) => {
     .replace(/-$/g, ""); // Remove trailing -
 };
 
-export const capitalize = (str: string) =>
-  str[0] ? str[0].toUpperCase() + str.slice(1) : "";
+export const capitalize = (str: string) => (str[0] ? str[0].toUpperCase() + str.slice(1) : "");
 
 export const deslugify = (slug: string) => {
   return slug
@@ -166,10 +154,7 @@ export const formatProductName = (name: string, variant?: string) => {
 
 type Money = { amount: number | null | undefined; currency: string };
 
-export function invariant(
-  condition: unknown,
-  message: string
-): asserts condition {
+export function invariant(condition: unknown, message: string): asserts condition {
   if (!condition) {
     throw new Error(message);
   }
@@ -187,30 +172,20 @@ const getDecimalsForStripe = (currency: string) => {
   return decimals;
 };
 
-export const getStripeAmountFromDecimal = ({
-  amount: major,
-  currency,
-}: Money) => {
+export const getStripeAmountFromDecimal = ({ amount: major, currency }: Money) => {
   const decimals = getDecimalsForStripe(currency);
   const multiplier = 10 ** decimals;
   return Number.parseInt((major * multiplier).toFixed(0), 10);
 };
 
-export const getDecimalFromStripeAmount = ({
-  amount: minor,
-  currency,
-}: Money) => {
+export const getDecimalFromStripeAmount = ({ amount: minor, currency }: Money) => {
   assertInteger(minor);
   const decimals = getDecimalsForStripe(currency);
   const multiplier = 10 ** decimals;
   return Number.parseFloat((minor / multiplier).toFixed(decimals));
 };
 
-export const formatMoney = ({
-  amount,
-  currency,
-  locale = "en-US",
-}: Money & { locale?: string }) => {
+export const formatMoney = ({ amount, currency, locale = "en-US" }: Money & { locale?: string }) => {
   if (!amount) {
     return amount;
   }
@@ -222,9 +197,7 @@ export const formatMoney = ({
   }).format(amount);
 };
 
-export const getVariantName = (
-  variant: NonNullable<Product["variants"]>[number]
-) => {
+export const getVariantName = (variant: NonNullable<Product["variants"]>[number]) => {
   return variant?.color || variant?.size;
 };
 
@@ -261,9 +234,7 @@ const calculateCartTotal = (cartItems: CartItem[]) => {
   }, 0);
 };
 
-const getImageFromVariant = (
-  variant: Product["variants"][number]
-): Media | null => {
+const getImageFromVariant = (variant: Product["variants"][number]): Media | null => {
   if (!variant.images || variant.images.length === 0) {
     return null;
   }
@@ -300,9 +271,8 @@ const buildQuery = (params: RestParams = {}, query: Where = {}) => {
   });
 };
 
-export {
-  calculateCartTotal,
-  getImageFromVariant,
-  getImagFromProduct,
-  buildQuery,
-};
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export { calculateCartTotal, getImageFromVariant, getImagFromProduct, buildQuery, delay };

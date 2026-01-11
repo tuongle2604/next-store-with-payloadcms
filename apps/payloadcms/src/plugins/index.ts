@@ -110,15 +110,18 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  // searchPlugin({
-  //   collections: ['posts', 'products'],
-  //   beforeSync: beforeSyncWithSearch,
-  //   searchOverrides: {
-  //     fields: ({ defaultFields }) => {
-  //       return [...defaultFields, ...searchFields]
-  //     },
-  //   },
-  // }),
+  searchPlugin({
+    collections: ["products"],
+    beforeSync: beforeSyncWithSearch,
+    searchOverrides: {
+      admin: {
+        defaultColumns: ["title", "thumbnail", "description"],
+      },
+      fields: ({ defaultFields }) => {
+        return [...defaultFields, ...searchFields];
+      },
+    },
+  }),
   // payloadCloudPlugin(),
   s3Storage({
     collections: {
